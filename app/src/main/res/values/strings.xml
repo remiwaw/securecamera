@@ -2,4 +2,6 @@
 	<string name="app_name">SecurePhotos</string>
 	<!-- TODO: Remove or change this placeholder text -->
 	<string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rationale_title">Camera permission needed!</string>
+	<string name="rationale_description">To use this function you have to grant camera permission.</string>
 </resources>
