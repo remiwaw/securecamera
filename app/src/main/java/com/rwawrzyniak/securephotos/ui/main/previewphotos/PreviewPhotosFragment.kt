@@ -62,7 +62,7 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 
 			with(viewModel) {
 				observeState()
-					.collect(::handleStateChanges)
+					.collect { handleStateChanges(it) }
 
 				observeEffect()
 					.collect { handleEffect(it) }
@@ -70,7 +70,7 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 		}
 	}
 
-	private suspend fun handleStateChanges(state: PreviewPhotosViewState) {
+	private fun handleStateChanges(state: PreviewPhotosViewState) {
 		CoroutineScope(Dispatchers.Main).launch {
 			when (state) {
 				PreviewPhotosViewState.Initialising -> viewModel.onAction(PreviewPhotosViewAction.Initialize)
@@ -79,10 +79,12 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 		}
 	}
 
+	// TODO()
 	private fun handleEffect(effect: PreviewPhotosViewEffect) {
 		when (effect) {
-			PreviewPhotosViewEffect.ShowLoadingIndicator -> TODO()
-			PreviewPhotosViewEffect.HideLoadingIndicator -> TODO()
+			PreviewPhotosViewEffect.ShowLoadingIndicator -> {}
+			PreviewPhotosViewEffect.HideLoadingIndicator -> {}
+			PreviewPhotosViewEffect.ShowEmptyList -> {}
 		}
 	}
 

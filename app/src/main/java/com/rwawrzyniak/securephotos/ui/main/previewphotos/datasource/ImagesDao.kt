@@ -1,10 +1,10 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource
 
+import java.io.File
 import javax.inject.Inject
 
-// TODO
-class ImagesDao @Inject constructor(){
-	fun load(pageNumber: Int, pageSize: Int): List<ImageEntity> {
-		return listOf(ImageEntity("image A", ByteArray(1)), ImageEntity("image B", ByteArray(2)))
-	}
+// TODO encryption here?
+class ImagesDao @Inject constructor(private val fileImageProvider: FileImageProvider){
+	fun load(pageNumber: Int, pageSize: Int): List<File> = fileImageProvider.readFilesPaged(pageNumber, pageSize)
+	fun save(name: String, readBytes: ByteArray) = fileImageProvider.save(name, readBytes)
 }

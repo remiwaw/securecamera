@@ -13,10 +13,24 @@
 		android:layout_marginBottom="50dp"
 		android:elevation="2dp"
 		android:scaleType="fitCenter"
-		android:text="Go to take photo"
+		android:text="Take photo"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent" />
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/goToViewPhotos" />
+
+	<Button
+		android:id="@+id/goToViewPhotos"
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:layout_marginBottom="50dp"
+		android:elevation="2dp"
+		android:scaleType="fitCenter"
+		android:text="View photos"
+		app:layout_constraintStart_toEndOf="@id/goToTakePhoto"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

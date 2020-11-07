@@ -4,12 +4,13 @@ import android.content.Context
 import androidx.camera.core.ImageCapture
 import com.rwawrzyniak.securephotos.R
 import java.io.File
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
 class CreateImageCaptureStorageOptions(private val context: Context) {
 
-	fun createOutputOptions(): ImageCapture.OutputFileOptions {
+	fun createOutputOptions(): Pair<ImageCapture.OutputFileOptions, File> {
 		val photoFile = File(
 			getOutputDirectory(context),
 			SimpleDateFormat(
@@ -17,7 +18,7 @@ class CreateImageCaptureStorageOptions(private val context: Context) {
 			).format(System.currentTimeMillis()) + ".jpg"
 		)
 
-		return ImageCapture.OutputFileOptions.Builder(photoFile).build()
+		return Pair(ImageCapture.OutputFileOptions.Builder(photoFile).build(), photoFile)
 	}
 
 	private fun getOutputDirectory(context: Context): File {

@@ -14,7 +14,11 @@ class ImagesDataSource @Inject constructor(
 	override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ImageDto> {
 		val pageNumber = params.key ?: INITIAL_PAGE
 		val pageSize = params.loadSize
-		val imageEntities: List<ImageDto> = imagesDao.load(pageNumber, pageSize).map(imageMapper::mapFromEntity)
+		val imageEntities: List<ImageDto> = imagesDao.load(pageNumber, pageSize).map {
+			imageMapper.mapFromEntity(
+				ImageEntity(it.name, it.readBytes())
+			)
+		}
 		return mapToLoadResult(imageEntities, params)
 	}
 

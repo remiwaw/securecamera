@@ -29,7 +29,8 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	private val imagesDataSource: ImagesDataSource
 ) : PreviewPhotosViewModel() {
 
-	private val state = ConflatedBroadcastChannel<PreviewPhotosViewState>()
+	private val state = ConflatedBroadcastChannel<PreviewPhotosViewState>(PreviewPhotosViewState.Initialising)
+
 	private val effects = BroadcastChannel<PreviewPhotosViewEffect>(1)
 
 	override fun observeState(): Flow<PreviewPhotosViewState> = state.asFlow()
@@ -39,7 +40,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	override suspend fun onAction(action: PreviewPhotosViewAction) {
 		when(action){
 			PreviewPhotosViewAction.Initialize -> onInitialize()
-			is PreviewPhotosViewAction.OnLoadingFinished -> onLoadingFinished()
+			is PreviewPhotosViewAction.OnLoadingFinished -> onLoadingFinished(action.itemCount)
 		}
 	}
 
@@ -52,8 +53,12 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 		effects.send(PreviewPhotosViewEffect.HideLoadingIndicator)
 	}
 
-	private fun onLoadingFinished() {
-		TODO("Not yet implemented")
+	// TODO
+	private suspend fun onLoadingFinished(itemCount: Int) {
+		effects.send(PreviewPhotosViewEffect.HideLoadingIndicator)
+		if (itemCount == 0) {
+			effects.send(PreviewPhotosViewEffect.ShowEmptyList)
+		}
 	}
 
 	private fun wirePagedList(): Flow<PagingData<ImageDto>> {
@@ -69,8 +74,17 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	}
 
 	private suspend fun updatePageList(pagingDataFlow: Flow<PagingData<ImageDto>>) {
-		val oldState = (state.value as PreviewPhotosViewState.ShowImages)
-		state.send(oldState.copy(pagingDataFlow = pagingDataFlow))
+		when (val oldState = state.value) {
+			is PreviewPhotosViewState.Initialising -> {
+				state.send(PreviewPhotosViewState.ShowImages(header = "testHeader", pagingDataFlow = pagingDataFlow))
+			}
+			is PreviewPhotosViewState.ShowImages -> {
+				state.send(oldState.copy(pagingDataFlow = pagingDataFlow))
+			}
+			else -> {
+				throw IllegalArgumentException("No such state")
+			}
+		}
 	}
 
 	internal companion object {

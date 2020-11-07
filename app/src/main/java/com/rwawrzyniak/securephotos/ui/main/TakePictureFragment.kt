@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rwawrzyniak.securephotos.R
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.FileImageProvider
 import com.rwawrzyniak.securephotos.ui.main.permissions.CameraPermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.CameraPermissionFragment.Companion.createAndCommitPermissionFragment
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDao
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.take_picture_fragment.*
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +28,8 @@ class TakePictureFragment : Fragment(R.layout.take_picture_fragment) {
 
 	private lateinit var startCameraUseCase: StartCameraUseCase
 	private lateinit var permissionFragment: CameraPermissionFragment
-
+	private val imagesDao = ImagesDao(FileImageProvider())
+	
 	@ExperimentalCoroutinesApi
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -35,7 +38,8 @@ class TakePictureFragment : Fragment(R.layout.take_picture_fragment) {
 		startCameraUseCase = StartCameraUseCase(
 			CreateImageCaptureStorageOptions(context),
 			context,
-			this
+			this,
+			imagesDao
 		)
 
 		permissionFragment = createAndCommitPermissionFragment(CAMERA_PERMISSION_FRAGMENT_TAG)

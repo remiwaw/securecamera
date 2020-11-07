@@ -1,17 +1,15 @@
 package com.rwawrzyniak.securephotos.ui.main
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDao
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
+import java.net.URI
 import java.util.concurrent.Executor
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -21,7 +19,8 @@ import kotlin.coroutines.suspendCoroutine
 class StartCameraUseCase(
 	private val createImageCaptureStorageOptions: CreateImageCaptureStorageOptions,
 	private val context: Context,
-	private val lifecycleOwner: LifecycleOwner
+	private val lifecycleOwner: LifecycleOwner,
+	private val imagesDao: ImagesDao
 ) {
 
 	private var imageCapture: ImageCapture? = null
@@ -74,12 +73,18 @@ class StartCameraUseCase(
 	private suspend fun ImageCapture.takePicture(executor: Executor): ImageProxy {
 		return suspendCoroutine { continuation ->
 
-			takePicture(createImageCaptureStorageOptions.createOutputOptions(), executor, object : ImageCapture.OnImageCapturedCallback(),
+			val createOutputOptionsAndFilePair: Pair<ImageCapture.OutputFileOptions, File> = createImageCaptureStorageOptions.createOutputOptions()
+
+			takePicture(createOutputOptionsAndFilePair.first, executor, object : ImageCapture.OnImageCapturedCallback(),
 				ImageCapture.OnImageSavedCallback {
 
 				override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-					val msg = "Photo capture succeeded: ${outputFileResults.savedUri}"
-					Log.d(TAG, msg)
+					// This api is not clear, outputFileResults.savedUri is not null ONLY if file was saved using MediaStore
+					val savedImage = createOutputOptionsAndFilePair.second
+					imagesDao.save(savedImage.name, savedImage.readBytes())
+					// We delete image, we want to save only encrypted version.
+					savedImage.delete()
+					Log.d(TAG, "image saved:${savedImage.name}")
 				}
 
 				override fun onCaptureSuccess(image: ImageProxy) {
@@ -91,6 +96,7 @@ class StartCameraUseCase(
 				override fun onError(exception: ImageCaptureException) {
 					Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
 
+					// TODO handle exception
 					continuation.resumeWithException(exception)
 					super.onError(exception)
 				}

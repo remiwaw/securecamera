@@ -13,10 +13,17 @@
 		<action
 			android:id="@+id/action_mainFragment_to_takePictureFragment"
 			app:destination="@id/takePictureFragment" />
+		<action
+			android:id="@+id/action_mainFragment_to_previewPhotosFragment"
+			app:destination="@id/previewPhotosFragment" />
 	</fragment>
 	<fragment
 		android:id="@+id/takePictureFragment"
 		android:name="com.rwawrzyniak.securephotos.ui.main.TakePictureFragment"
 		android:label="TakePictureFragment" />
+	<fragment
+		android:id="@+id/previewPhotosFragment"
+		android:name="com.rwawrzyniak.securephotos.ui.main.previewphotos.PreviewPhotosFragment"
+		android:label="PreviewPhotosFragment" />
 
 </navigation>

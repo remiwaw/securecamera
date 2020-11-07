@@ -18,5 +18,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 		goToTakePhoto.setOnClickListener {
 			findNavController().navigate(R.id.action_mainFragment_to_takePictureFragment)
 		}
+
+		goToViewPhotos.setOnClickListener {
+			findNavController().navigate(R.id.action_mainFragment_to_previewPhotosFragment)
+		}
 	}
 }

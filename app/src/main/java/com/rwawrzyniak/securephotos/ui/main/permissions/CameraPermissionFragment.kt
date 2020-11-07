@@ -24,7 +24,7 @@ class CameraPermissionFragment : Fragment() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		requestCameraPermission()
+		requestPermissions()
 	}
 
 	override fun onRequestPermissionsResult(
@@ -37,7 +37,8 @@ class CameraPermissionFragment : Fragment() {
 					deferredGrant.complete(true)
 					return
 				}
-				shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+				shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+						|| shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)-> {
 					showRationaleDialog(
 						getString(R.string.rationale_title),
 						getString(R.string.rationale_description)
@@ -57,14 +58,14 @@ class CameraPermissionFragment : Fragment() {
 		val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
 		builder.setTitle(title)
 			.setMessage(message)
-			.setPositiveButton("Ok") { _, _ -> requestCameraPermission() }
+			.setPositiveButton("Ok") { _, _ -> requestPermissions() }
 		builder.create().show()
 	}
 
-    private fun requestCameraPermission() {
+    private fun requestPermissions() {
 		// TODO deal with deprecation
 		@Suppress("DEPRECATION")
-		requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+		(requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS))
 	}
 
 	private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -75,7 +76,10 @@ class CameraPermissionFragment : Fragment() {
 
 	companion object {
 		private const val REQUEST_CODE_PERMISSIONS = 10
-		private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+		private val REQUIRED_PERMISSIONS = arrayOf(
+			Manifest.permission.CAMERA,
+			Manifest.permission.WRITE_EXTERNAL_STORAGE
+		)
 		private fun hasPermissions(context: Context) = REQUIRED_PERMISSIONS.all {
 			ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
 		}
