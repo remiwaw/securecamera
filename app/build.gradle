@@ -1,3 +1,4 @@
+apply plugin: 'kotlin-android'
 android {
 
 	defaultConfig {
@@ -16,10 +17,15 @@ android {
 
 dependencies {
 	implementation libraries.hilt.android
+	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+	implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+	implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 	kapt libraries.hilt.kapt
 	implementation libraries.hilt.viewmodel
 	kapt libraries.hilt.kaptX
 	testImplementation libraries.hilt.androidTesting
+
+	implementation libraries.picasso
 
 	// Modules
 	implementation project(':core-android')

@@ -2,6 +2,8 @@ dependencies {
 	api libraries.coroutinesCore
 	api libraries.coroutinesAndroid
 
+	api libraries.androidx.paging
+
 	api libraries.androidx.core
 	api libraries.androidx.appcompat
 	api libraries.androidx.constraintLayout
@@ -19,6 +21,7 @@ dependencies {
 	api libraries.androidx.cameraExt
 	api libraries.androidx.navigationFragment
 	api libraries.androidx.navigationUI
+
 	androidTestImplementation libraries.androidx.navigationTesting
 
 }
