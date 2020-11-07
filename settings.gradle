@@ -1,2 +1,4 @@
 include ':app'
-rootProject.name = "SecurePhotos"
+//include ':storage'
+include ':core'
+include ':core-android'

@@ -13,7 +13,7 @@ import kotlinx.coroutines.CompletableDeferred
 
 // source: https://geoffreymetais.github.io/code/runtime-permissions/#deferred-behavior
 class CameraPermissionFragment : Fragment() {
-	suspend fun checkPermission(): Boolean = if (!hasPermissions(this.requireContext())) {
+	suspend fun checkPermission(): Boolean = if (hasPermissions(this.requireContext())) {
 		true
 	} else {
 		awaitGrant()

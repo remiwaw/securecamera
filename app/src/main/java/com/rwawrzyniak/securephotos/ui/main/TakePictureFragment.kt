@@ -30,14 +30,11 @@ class TakePictureFragment : Fragment(R.layout.take_picture_fragment) {
 	@ExperimentalCoroutinesApi
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-
-		// If user comes to this screen we ask for permission
-		// if not given we show toast and navigate back
-		// if given we startCamera
+		val context = requireContext()
 
 		startCameraUseCase = StartCameraUseCase(
-			CreateImageCaptureStorageOptions(requireContext()),
-			requireContext(),
+			CreateImageCaptureStorageOptions(context),
+			context,
 			this
 		)
 
@@ -47,7 +44,11 @@ class TakePictureFragment : Fragment(R.layout.take_picture_fragment) {
 			if(permissionFragment.checkPermission()){
 				startCameraUseCase.startCamera(viewFinder)
 			} else {
-				Toast.makeText(requireContext(), "You have to grant camera permission, to use this app", Toast.LENGTH_SHORT).show()
+				Toast.makeText(
+					context,
+					context.getString(R.string.camera_permission_denied_permanently),
+					Toast.LENGTH_LONG
+				).show()
 				findNavController().popBackStack()
 			}
 		}
