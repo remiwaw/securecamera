@@ -4,23 +4,25 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.rwawrzyniak.securephotos.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preview_photos_fragment.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 	private val viewModel: PreviewPhotosViewModelImpl by viewModels()
-	private val imagesGridAdapter: ImagesGridAdapter by lazy { ImagesGridAdapter() }
+	private val imagesGridAdapter = ImagesGridAdapter()
 	private val loadStateListener = fun(combinedLoadStates: CombinedLoadStates) {
 		when (combinedLoadStates.source.refresh) {
 			is LoadState.NotLoading -> onLoadingFinished()
@@ -58,44 +60,31 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 	}
 
 	private fun wireUpViewModel() {
-		CoroutineScope(Dispatchers.Main).launch {
-
-			with(viewModel) {
-				observeState()
-					.collect { handleStateChanges(it) }
-
-				observeEffect()
-					.collect { handleEffect(it) }
-			}
-		}
+		viewModel.observeState()
+			.onEach { state -> handleStateChanges(state) }
+			.launchIn(lifecycleScope)
 	}
 
-	private fun handleStateChanges(state: PreviewPhotosViewState) {
-		CoroutineScope(Dispatchers.Main).launch {
-			when (state) {
-				PreviewPhotosViewState.Initialising -> viewModel.onAction(PreviewPhotosViewAction.Initialize)
-				is PreviewPhotosViewState.ShowImages -> showImages(state)
-			}
-		}
-	}
-
-	// TODO()
-	private fun handleEffect(effect: PreviewPhotosViewEffect) {
-		when (effect) {
-			PreviewPhotosViewEffect.ShowLoadingIndicator -> {}
-			PreviewPhotosViewEffect.HideLoadingIndicator -> {}
-			PreviewPhotosViewEffect.ShowEmptyList -> {}
-		}
+	private suspend fun handleStateChanges(state: PreviewPhotosViewModel.PreviewPhotosViewState) {
+		state.pagingDataFlow?.let { showImages(it) }
+		state.isLoading
 	}
 
 	private fun onLoadingFinished() {
-		CoroutineScope(Dispatchers.Main).launch {
-			viewModel.onAction(PreviewPhotosViewAction.OnLoadingFinished(imagesGridAdapter.itemCount))
-		}
+		viewModel.onAction(
+			PreviewPhotosViewModel.PreviewPhotosViewAction.OnLoadingFinished(
+				imagesGridAdapter.itemCount
+			)
+		)
 	}
 
-	private suspend fun showImages(state: PreviewPhotosViewState.ShowImages) {
-		state.pagingDataFlow
-			?.collect { pagingData -> imagesGridAdapter.submitData(viewLifecycleOwner.lifecycle, pagingData) }
+	private suspend fun showImages(pagingDataFlow: Flow<PagingData<ImageDto>>) {
+		pagingDataFlow
+			.collect { pagingData ->
+				imagesGridAdapter.submitData(
+					viewLifecycleOwner.lifecycle,
+					pagingData
+				)
+			}
 	}
 }

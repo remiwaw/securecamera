@@ -11,15 +11,25 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 internal abstract class PreviewPhotosViewModel : ViewModel() {
+
+	internal sealed class PreviewPhotosViewAction {
+		data class OnLoadingFinished(val itemCount: Int) : PreviewPhotosViewAction()
+		object Initialize : PreviewPhotosViewAction()
+	}
+
+	internal data class PreviewPhotosViewState(
+		val pagingDataFlow: Flow<PagingData<ImageDto>>? = null,
+		val isLoading: Boolean = true,
+		val error: Throwable? = null
+	)
+
 	abstract fun observeState(): Flow<PreviewPhotosViewState>
-	abstract fun observeEffect(): Flow<PreviewPhotosViewEffect>
-	abstract suspend fun onAction(action: PreviewPhotosViewAction)
+	abstract fun onAction(action: PreviewPhotosViewAction)
 }
 
 
@@ -29,37 +39,40 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	private val imagesDataSource: ImagesDataSource
 ) : PreviewPhotosViewModel() {
 
-	private val state = ConflatedBroadcastChannel<PreviewPhotosViewState>(PreviewPhotosViewState.Initialising)
+	private val actionChannel = Channel<PreviewPhotosViewAction>(Channel.UNLIMITED)
+	private val _state = MutableStateFlow(PreviewPhotosViewState())
+	private val state: StateFlow<PreviewPhotosViewState>
+		get() = _state
 
-	private val effects = BroadcastChannel<PreviewPhotosViewEffect>(1)
+	override fun observeState(): Flow<PreviewPhotosViewState> = state
 
-	override fun observeState(): Flow<PreviewPhotosViewState> = state.asFlow()
-
-	override fun observeEffect(): Flow<PreviewPhotosViewEffect> = effects.asFlow()
-
-	override suspend fun onAction(action: PreviewPhotosViewAction) {
-		when(action){
-			PreviewPhotosViewAction.Initialize -> onInitialize()
-			is PreviewPhotosViewAction.OnLoadingFinished -> onLoadingFinished(action.itemCount)
-		}
+	override fun onAction(action: PreviewPhotosViewAction) {
+		actionChannel.offer(action)
 	}
 
-	private suspend fun onInitialize() {
-		effects.send(PreviewPhotosViewEffect.ShowLoadingIndicator)
-		wirePagedList()
-			.apply {
-				updatePageList(pagingDataFlow = this)
+	init {
+		viewModelScope.launch {
+			handleIntents()
+		}
+		onAction(PreviewPhotosViewAction.Initialize)
+	}
+
+	private suspend fun handleIntents() {
+		actionChannel.consumeAsFlow().collect { action ->
+			when (action) {
+				is PreviewPhotosViewAction.OnLoadingFinished -> {
+					if (action.itemCount == 0) {
+						{} //not items TODO
+					}
+				}
+				PreviewPhotosViewAction.Initialize -> {
+					_state.value = onInitialize()
+				}
 			}
-		effects.send(PreviewPhotosViewEffect.HideLoadingIndicator)
-	}
-
-	// TODO
-	private suspend fun onLoadingFinished(itemCount: Int) {
-		effects.send(PreviewPhotosViewEffect.HideLoadingIndicator)
-		if (itemCount == 0) {
-			effects.send(PreviewPhotosViewEffect.ShowEmptyList)
 		}
 	}
+
+	private fun onInitialize() = updatePageList(wirePagedList())
 
 	private fun wirePagedList(): Flow<PagingData<ImageDto>> {
 		val config = PagingConfig(
@@ -73,19 +86,8 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 			.cachedIn(viewModelScope)
 	}
 
-	private suspend fun updatePageList(pagingDataFlow: Flow<PagingData<ImageDto>>) {
-		when (val oldState = state.value) {
-			is PreviewPhotosViewState.Initialising -> {
-				state.send(PreviewPhotosViewState.ShowImages(header = "testHeader", pagingDataFlow = pagingDataFlow))
-			}
-			is PreviewPhotosViewState.ShowImages -> {
-				state.send(oldState.copy(pagingDataFlow = pagingDataFlow))
-			}
-			else -> {
-				throw IllegalArgumentException("No such state")
-			}
-		}
-	}
+	private fun updatePageList(pagingDataFlow: Flow<PagingData<ImageDto>>) =
+		PreviewPhotosViewState(pagingDataFlow = pagingDataFlow, isLoading = true, error = null)
 
 	internal companion object {
 		const val PAGE_SIZE = 30

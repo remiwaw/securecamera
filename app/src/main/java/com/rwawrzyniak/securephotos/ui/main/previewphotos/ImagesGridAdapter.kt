@@ -5,26 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.graphics.drawable.toDrawable
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rwawrzyniak.securephotos.R
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.image_item_in_grid_layout.view.*
-import java.io.File
 
 // source: https://acomputerengineer.com/2019/05/09/display-image-grid-in-recyclerview-in-kotlin-android/
-class ImagesGridAdapter : PagingDataAdapter<ImageDto, ImagesGridAdapter.ColorViewHolder>(DiffCallback()){
+class ImagesGridAdapter : PagingDataAdapter<ImageDto, ImagesGridAdapter.ImageViewHolder>(DiffCallback()){
 
 	private val images: MutableList<Bitmap> = mutableListOf()
 
 	override fun getItemCount(): Int = images.size
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorViewHolder =
-		ColorViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.image_item_in_grid_layout, parent, false))
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder =
+		ImageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.image_item_in_grid_layout, parent, false))
 
-	override fun onBindViewHolder(holder: ColorViewHolder, position: Int) {
+	override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
 		val bitmap: Bitmap = images[position]
 
 		// TODO maybe resize it before? com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageMapper.mapFromEntity
@@ -37,7 +34,7 @@ class ImagesGridAdapter : PagingDataAdapter<ImageDto, ImagesGridAdapter.ColorVie
 		}
 	}
 
-	class ColorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+	class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 		val iv = view.iv as ImageView
 	}
 }
