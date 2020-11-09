@@ -13,10 +13,8 @@ import com.rwawrzyniak.securephotos.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preview_photos_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -55,7 +53,7 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 	private fun setupUI() {
 		with(imagesRV) {
 			layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-			adapter = imagesGridAdapter
+			adapter =  imagesGridAdapter.withLoadStateFooter(ImagesLoadStateAdapter())
 		}
 	}
 
@@ -79,8 +77,9 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 	}
 
 	private suspend fun showImages(pagingDataFlow: Flow<PagingData<ImageDto>>) {
+		// TODO collect or collect latest?
 		pagingDataFlow
-			.collect { pagingData ->
+			.collectLatest { pagingData ->
 				imagesGridAdapter.submitData(
 					viewLifecycleOwner.lifecycle,
 					pagingData

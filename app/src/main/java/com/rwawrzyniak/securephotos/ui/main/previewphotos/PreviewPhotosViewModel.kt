@@ -62,6 +62,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 			when (action) {
 				is PreviewPhotosViewAction.OnLoadingFinished -> {
 					if (action.itemCount == 0) {
+						// show empty list text?
 						{} //not items TODO
 					}
 				}

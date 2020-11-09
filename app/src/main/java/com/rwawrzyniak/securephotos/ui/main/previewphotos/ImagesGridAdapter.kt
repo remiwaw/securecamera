@@ -1,6 +1,5 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos
 
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,30 +11,33 @@ import com.rwawrzyniak.securephotos.R
 import kotlinx.android.synthetic.main.image_item_in_grid_layout.view.*
 
 // source: https://acomputerengineer.com/2019/05/09/display-image-grid-in-recyclerview-in-kotlin-android/
-class ImagesGridAdapter : PagingDataAdapter<ImageDto, ImagesGridAdapter.ImageViewHolder>(DiffCallback()){
-
-	private val images: MutableList<Bitmap> = mutableListOf()
-
-	override fun getItemCount(): Int = images.size
+class ImagesGridAdapter : PagingDataAdapter<ImageDto, ImagesGridAdapter.ImageViewHolder>(DIFFER){
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder =
 		ImageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.image_item_in_grid_layout, parent, false))
 
 	override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-		val bitmap: Bitmap = images[position]
+		val imageDto: ImageDto? = getItem(position)
 
-		// TODO maybe resize it before? com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageMapper.mapFromEntity
+		imageDto?.let {
+			// TODO maybe resize it before? com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageMapper.mapFromEntity
 //			.resize(250, 250)
 //			.centerCrop()
 
-		holder.iv.setImageBitmap(bitmap)
-		holder.iv.setOnClickListener {
-			//handle click event on image
+			holder.iv.setImageBitmap(imageDto.bitmap)
+			holder.iv.setOnClickListener {
+				//handle click event on image
+			}
 		}
+
 	}
 
 	class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 		val iv = view.iv as ImageView
+	}
+
+	companion object {
+		private val DIFFER = DiffCallback()
 	}
 }
 
@@ -46,3 +48,4 @@ internal class DiffCallback : DiffUtil.ItemCallback<ImageDto>() {
 	override fun areContentsTheSame(oldItem: ImageDto, newItem: ImageDto): Boolean =
 		oldItem.title == newItem.title
 }
+
