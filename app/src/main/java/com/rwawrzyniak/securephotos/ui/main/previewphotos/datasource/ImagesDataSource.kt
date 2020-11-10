@@ -2,10 +2,11 @@ package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource
 
 import androidx.paging.PagingSource
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.DataState.Error
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageMapper
+import java.io.File
 import javax.inject.Inject
 
-// TODO
 class ImagesDataSource @Inject constructor(
     private val imagesDao: ImagesDao,
 	private val imageMapper: ImageMapper
@@ -14,12 +15,19 @@ class ImagesDataSource @Inject constructor(
 	override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ImageDto> {
 		val pageNumber = params.key ?: INITIAL_PAGE
 		val pageSize = params.loadSize
-		val imageEntities: List<ImageDto> = imagesDao.load(pageNumber, pageSize).map {
-			imageMapper.mapFromEntity(
-				ImageEntity(it.name, it.readBytes())
-			)
+		val dataState: DataState<List<File>> = imagesDao.load(pageNumber, pageSize)
+		return when (dataState) {
+			is DataState.Success -> {
+				val imageEntities = dataState.data.map {
+					imageMapper.mapFromEntity(
+						ImageEntity(it.name, it.readBytes())
+					)
+				}
+				mapToLoadResult(imageEntities, params)
+			}
+			is Error -> LoadResult.Error(dataState.exception)
+			else -> throw error("Not supported type")
 		}
-		return mapToLoadResult(imageEntities, params)
 	}
 
     private fun mapToLoadResult(

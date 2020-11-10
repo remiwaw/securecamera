@@ -1,38 +1,46 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource
 
 import android.os.Environment
-import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-// TOOD move to storage module
+// TODO move to storage module
 class FileImageProvider @Inject constructor(){
 
-	fun readFilesPaged(pageNumber: Int, pageSize: Int): List<File> {
-		val dir = getDir()
+	fun readFilesPaged(pageNumber: Int, pageSize: Int): DataState<List<File>> {
+		return  try {
+			if(!isExternalStorageReadable()){
+				// TODO replace with correct / default exception
+				DataState.Error(Exception("External storage not readable"))
+			}
 
-		if(!dir.exists()){
-			return listOf()
+			val dir = getDir()
+
+			if(!dir.exists()){
+				return DataState.Success(listOf<File>())
+			}
+
+			// TODO make sure there is no out of bound exception
+			val allFiles = dir.listFiles().filter { it.isFile }
+			val startIndex = if(pageNumber == 1) {
+				0
+			} else {
+				if((pageNumber-1*pageSize)-1 > allFiles.size-1) 0 else (pageNumber-1*pageSize)-1
+			}
+
+			val endIndex = if(pageNumber*pageSize > allFiles.size) allFiles.size else pageNumber*pageSize
+			val pagedList: List<File> = allFiles.subList(startIndex, endIndex)
+			DataState.Success(pagedList)
+		} catch (e: Exception){
+			DataState.Error(e)
 		}
-
-		// TODO make sure there is no out of bound exception
-		val allFiles = dir.listFiles().filter { it.isFile }
-		val startIndex = if(pageNumber == 1) {
-			0
-		} else {
-			if((pageNumber-1*pageSize)-1 > allFiles.size-1) 0 else (pageNumber-1*pageSize)-1
-		}
-
-		val endIndex = if(pageNumber*pageSize > allFiles.size) allFiles.size else pageNumber*pageSize
-		return allFiles.subList(startIndex, endIndex)
 	}
 
-	// TODO remove deprecation...
-	fun save(fileName: String, byteArray: ByteArray){
+	fun save(fileName: String, byteArray: ByteArray): DataState<Unit> = try {
 		if(!isExternalStorageWritable()){
-			Log.w("sss", "external storage not writable")
-
+			// TODO replace with correct / default exception
+			DataState.Error(Exception("External storage not writable"))
 		}
 		val dir = getDir()
 		dir.mkdirs()
@@ -43,9 +51,13 @@ class FileImageProvider @Inject constructor(){
 		val fos = FileOutputStream(file)
 		fos.write(byteArray)
 		fos.close()
+		DataState.Success(Unit)
+	} catch (e: Exception){
+		DataState.Error(e)
 	}
 
 	private fun getDir(): File {
+		// TODO remove deprecation... this may be problematic with target sdk android 10
 		val root = Environment.getExternalStorageDirectory()
 		return File("${root.absolutePath}$FOLDER")
 	}

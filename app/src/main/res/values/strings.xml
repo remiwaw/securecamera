@@ -6,4 +6,5 @@
 
 	<string name="rationale_title">Camera permission needed!</string>
 	<string name="rationale_description">To use this function you have to grant camera permission.</string>
+    <string name="no_data_available">No data available</string>
 </resources>

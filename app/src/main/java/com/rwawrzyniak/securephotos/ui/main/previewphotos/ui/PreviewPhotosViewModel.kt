@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main.previewphotos
+package com.rwawrzyniak.securephotos.ui.main.previewphotos.ui
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
@@ -9,6 +9,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -24,8 +25,7 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 
 	internal data class PreviewPhotosViewState(
 		val pagingDataFlow: Flow<PagingData<ImageDto>>? = null,
-		val isLoading: Boolean = true,
-		val error: Throwable? = null
+		val isEmpty: Boolean = true
 	)
 
 	abstract fun observeState(): Flow<PreviewPhotosViewState>
@@ -62,16 +62,20 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 			when (action) {
 				is PreviewPhotosViewAction.OnLoadingFinished -> {
 					if (action.itemCount == 0) {
-						// show empty list text?
-						{} //not items TODO
+						_state.value = prepareListEmptyState()
+					} else {
+						_state.value = prepareLisLoadingCompleteState()
 					}
 				}
-				PreviewPhotosViewAction.Initialize -> {
-					_state.value = onInitialize()
-				}
+				PreviewPhotosViewAction.Initialize -> _state.value = onInitialize()
 			}
 		}
 	}
+	private fun prepareLisLoadingCompleteState(): PreviewPhotosViewState =
+		_state.value.copy(isEmpty = false)
+
+	private fun prepareListEmptyState(): PreviewPhotosViewState =
+		_state.value.copy(isEmpty = true)
 
 	private fun onInitialize() = updatePageList(wirePagedList())
 
@@ -88,7 +92,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	}
 
 	private fun updatePageList(pagingDataFlow: Flow<PagingData<ImageDto>>) =
-		PreviewPhotosViewState(pagingDataFlow = pagingDataFlow, isLoading = true, error = null)
+		PreviewPhotosViewState(pagingDataFlow = pagingDataFlow)
 
 	internal companion object {
 		const val PAGE_SIZE = 30

@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main.previewphotos
+package com.rwawrzyniak.securephotos.ui.main.previewphotos.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rwawrzyniak.securephotos.R
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
 import kotlinx.android.synthetic.main.image_item_in_grid_layout.view.*
 
 // source: https://acomputerengineer.com/2019/05/09/display-image-grid-in-recyclerview-in-kotlin-android/

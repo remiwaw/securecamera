@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main
+package com.rwawrzyniak.securephotos.ui.main.takepicture.ui
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.rwawrzyniak.securephotos.R
+import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.CreateImageCaptureStorageOptions
+import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.StartCameraUseCase
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.FileImageProvider
 import com.rwawrzyniak.securephotos.ui.main.permissions.CameraPermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.CameraPermissionFragment.Companion.createAndCommitPermissionFragment
@@ -29,7 +31,7 @@ class TakePictureFragment : Fragment(R.layout.take_picture_fragment) {
 	private lateinit var startCameraUseCase: StartCameraUseCase
 	private lateinit var permissionFragment: CameraPermissionFragment
 	private val imagesDao = ImagesDao(FileImageProvider())
-	
+
 	@ExperimentalCoroutinesApi
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)

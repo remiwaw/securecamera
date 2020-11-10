@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main
+package com.rwawrzyniak.securephotos.ui.main.takepicture.ui
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject

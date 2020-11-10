@@ -1,10 +1,9 @@
-package com.rwawrzyniak.securephotos.ui.main
+package com.rwawrzyniak.securephotos.ui.main.takepicture.usecase
 
 import android.content.Context
 import androidx.camera.core.ImageCapture
 import com.rwawrzyniak.securephotos.R
 import java.io.File
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -12,11 +11,11 @@ class CreateImageCaptureStorageOptions(private val context: Context) {
 
 	fun createOutputOptions(): Pair<ImageCapture.OutputFileOptions, File> {
 		val photoFile = File(
-			getOutputDirectory(context),
-			SimpleDateFormat(
-				FILENAME_FORMAT, Locale.US
-			).format(System.currentTimeMillis()) + ".jpg"
-		)
+            getOutputDirectory(context),
+            SimpleDateFormat(
+                FILENAME_FORMAT, Locale.US
+            ).format(System.currentTimeMillis()) + ".jpg"
+        )
 
 		return Pair(ImageCapture.OutputFileOptions.Builder(photoFile).build(), photoFile)
 	}

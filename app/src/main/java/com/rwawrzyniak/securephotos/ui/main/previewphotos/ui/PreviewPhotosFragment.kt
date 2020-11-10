@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main.previewphotos
+package com.rwawrzyniak.securephotos.ui.main.previewphotos.ui
 
 import android.os.Bundle
 import android.view.View
@@ -10,11 +10,11 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.rwawrzyniak.securephotos.R
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preview_photos_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -53,7 +53,10 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 	private fun setupUI() {
 		with(imagesRV) {
 			layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-			adapter =  imagesGridAdapter.withLoadStateFooter(ImagesLoadStateAdapter())
+			adapter =  imagesGridAdapter.withLoadStateHeaderAndFooter(
+				header = ImagesLoadStateAdapter { imagesGridAdapter.retry() },
+				footer = ImagesLoadStateAdapter { imagesGridAdapter.retry() }
+			)
 		}
 	}
 
@@ -65,7 +68,6 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 
 	private suspend fun handleStateChanges(state: PreviewPhotosViewModel.PreviewPhotosViewState) {
 		state.pagingDataFlow?.let { showImages(it) }
-		state.isLoading
 	}
 
 	private fun onLoadingFinished() {
