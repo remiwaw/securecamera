@@ -12,7 +12,7 @@ import com.rwawrzyniak.securephotos.ext.getOrAddFragment
 import kotlinx.coroutines.CompletableDeferred
 
 // source: https://geoffreymetais.github.io/code/runtime-permissions/#deferred-behavior
-class CameraPermissionFragment : Fragment() {
+class CameraAndStoragePermissionFragment : Fragment() {
 	suspend fun checkPermission(): Boolean = if (hasPermissions(this.requireContext())) {
 		true
 	} else {
@@ -84,7 +84,7 @@ class CameraPermissionFragment : Fragment() {
 			ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
 		}
 
-		fun Fragment.createAndCommitPermissionFragment(tag: String) : CameraPermissionFragment =
-			getOrAddFragment(tag = tag) { CameraPermissionFragment() }
+		fun Fragment.createAndCommitPermissionFragment(tag: String) : CameraAndStoragePermissionFragment =
+			getOrAddFragment(tag = tag) { CameraAndStoragePermissionFragment() }
 	}
 }

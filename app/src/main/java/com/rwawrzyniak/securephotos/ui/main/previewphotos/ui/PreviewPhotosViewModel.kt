@@ -52,12 +52,12 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 
 	init {
 		viewModelScope.launch {
-			handleIntents()
+			handleActions()
 		}
 		onAction(PreviewPhotosViewAction.Initialize)
 	}
 
-	private suspend fun handleIntents() {
+	private suspend fun handleActions() {
 		actionChannel.consumeAsFlow().collect { action ->
 			when (action) {
 				is PreviewPhotosViewAction.OnLoadingFinished -> {
@@ -71,6 +71,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 			}
 		}
 	}
+
 	private fun prepareLisLoadingCompleteState(): PreviewPhotosViewState =
 		_state.value.copy(isEmpty = false)
 
