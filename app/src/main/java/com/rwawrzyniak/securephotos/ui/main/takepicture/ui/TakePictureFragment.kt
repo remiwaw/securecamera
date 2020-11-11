@@ -76,7 +76,7 @@ class TakePictureFragment : Fragment(R.layout.take_picture_fragment) {
 	private fun showPermissionPernamentlyDeniedPopup(context: Context) {
 		Toast.makeText(
 			context,
-			context.getString(R.string.camera_permission_denied_permanently),
+			context.getString(R.string.storage_and_camera_permission_denied_permanently),
 			Toast.LENGTH_LONG
 		).show()
 	}

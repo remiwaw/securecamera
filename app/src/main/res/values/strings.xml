@@ -1,8 +1,7 @@
 <resources>
 	<string name="app_name">SecurePhotos</string>
-	<!-- TODO: Remove or change this placeholder text -->
-	<string name="hello_blank_fragment">Hello blank fragment</string>
-	<string name="camera_permission_denied_permanently">"Camera permission denied permanently! Change it in settings",</string>
+	<string name="storage_and_camera_permission_denied_permanently">"Camera permission denied permanently! Change it in settings",</string>
+	<string name="storage_permission_denied_permanently">"Camera permission denied permanently! Change it in settings",</string>
 
 	<string name="rationale_title">Permision needed!</string>
 	<string name="rationale_description">To use this function you have to grant following access: </string>
