@@ -10,13 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rwawrzyniak.securephotos.R
-import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.CreateImageCaptureStorageOptions
-import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.StartCameraUseCase
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.FileImageProvider
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment.Companion.createAndCommitPermissionFragment
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.FileImageProvider
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDao
 import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel.TakePhotosViewAction.TakePhoto
+import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.CreateImageCaptureStorageOptions
+import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.StartCameraUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.take_picture_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -63,25 +63,13 @@ class TakePictureFragment : Fragment(R.layout.take_picture_fragment) {
 
 	private suspend fun handleStateChanges(state: TakePictureViewModel.TakePictureViewState) {
 		val context = requireContext()
-
+		if(!andStoragePermissionFragment.checkPermission()){
+			showPermissionPernamentlyDeniedPopup(context)
+			findNavController().popBackStack()
+		}
 		when {
-			state.isCheckPermission -> {
-				if(andStoragePermissionFragment.checkPermission()){
-					startCameraUseCase.startCamera(viewFinder)
-				} else {
-					showPermissionPernamentlyDeniedPopup(context)
-					findNavController().popBackStack()
-				}
-			}
-			state.isTakingPicture -> {
-				if(andStoragePermissionFragment.checkPermission()){
-					startCameraUseCase.takePicture(viewFinder)
-				} else {
-					// TODO check permission in one place
-					showPermissionPernamentlyDeniedPopup(context)
-					findNavController().popBackStack()
-				}
-			}
+			state.isCheckPermission -> startCameraUseCase.startCamera(viewFinder)
+			state.isTakingPicture -> startCameraUseCase.takePicture(viewFinder)
 		}
 	}
 
