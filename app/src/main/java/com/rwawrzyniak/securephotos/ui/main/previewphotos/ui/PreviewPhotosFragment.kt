@@ -16,8 +16,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment.Companion.createAndCommitPermissionFragment
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
-import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureFragment
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preview_photos_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi

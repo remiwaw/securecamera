@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper
+package com.rwawrzyniak.securephotos.core.android
 
 interface EntityMapper <Entity, DomainModel>{
 

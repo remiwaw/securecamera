@@ -2,6 +2,7 @@ package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.rwawrzyniak.securephotos.core.android.EntityMapper
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 

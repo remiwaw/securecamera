@@ -9,7 +9,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel

@@ -1,10 +1,11 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper
 
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
+import com.rwawrzyniak.securephotos.core.android.EntityMapper
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImageEntity
 import javax.inject.Inject
 
-class ImageMapper @Inject constructor(private val byteArrayBitMapMapper: ByteArrayBitMapMapper): EntityMapper<ImageEntity, ImageDto> {
+class ImageMapper @Inject constructor(private val byteArrayBitMapMapper: ByteArrayBitMapMapper):
+	EntityMapper<ImageEntity, ImageDto> {
 
     fun mapFromEntityList(entities: List<ImageEntity>): List<ImageDto>{
         return entities.map { mapFromEntity(it) }

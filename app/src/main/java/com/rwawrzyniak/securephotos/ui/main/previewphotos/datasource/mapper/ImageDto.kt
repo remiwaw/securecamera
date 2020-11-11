@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main.previewphotos
+package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper
 
 import android.graphics.Bitmap
 

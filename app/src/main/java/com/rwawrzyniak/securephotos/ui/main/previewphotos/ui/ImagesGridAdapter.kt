@@ -8,7 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.rwawrzyniak.securephotos.R
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
 import kotlinx.android.synthetic.main.image_item_in_grid_layout.view.*
 import javax.inject.Inject
 

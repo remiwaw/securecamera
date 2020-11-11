@@ -1,5 +1,7 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource
 
+import com.rwawrzyniak.securephotos.core.android.DataState
+import com.rwawrzyniak.securephotos.storage.FileImageProvider
 import java.io.File
 import javax.inject.Inject
 
