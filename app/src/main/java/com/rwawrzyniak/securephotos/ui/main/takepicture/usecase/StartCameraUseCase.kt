@@ -20,13 +20,14 @@ import kotlin.coroutines.suspendCoroutine
 class StartCameraUseCase @Inject constructor(
 	private val createImageCaptureStorageOptions: CreateImageCaptureStorageOptions,
 	@ActivityContext private val context: Context,
-	private val imagesDao: ImagesDao
+	private val imagesDao: ImagesDao,
+	private val cameraProvider: ProcessCameraProvider
 ) {
 
 	private var imageCapture: ImageCapture? = null
 
-	suspend fun startCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner){
-		imageCapture = bindUseCases(context.getCameraProvider(), previewView, lifecycleOwner)
+	fun startCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner){
+		imageCapture = bindUseCases(previewView, lifecycleOwner)
 	}
 
 	suspend fun takePicture(
@@ -40,7 +41,6 @@ class StartCameraUseCase @Inject constructor(
 	}
 
 	private fun bindUseCases(
-        cameraProvider: ProcessCameraProvider,
         previewView: PreviewView,
         lifecycleOwner: LifecycleOwner
 	): ImageCapture {
@@ -109,14 +109,8 @@ class StartCameraUseCase @Inject constructor(
         }
 	}
 
-	private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
-        suspendCoroutine { continuation ->
-            ProcessCameraProvider.getInstance(this).apply {
-                addListener(Runnable {
-                    continuation.resume(get())
-                }, executor)
-            }
-        }
+	private fun Context.getCameraProvider(): ProcessCameraProvider =
+		ProcessCameraProvider.getInstance(this).get()
 
 	private val Context.executor: Executor
 		get() = ContextCompat.getMainExecutor(this)

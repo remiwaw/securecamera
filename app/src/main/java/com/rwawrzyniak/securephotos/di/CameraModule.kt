@@ -11,6 +11,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 @Module
@@ -18,8 +19,8 @@ import javax.inject.Singleton
 object CameraModule {
 	@Singleton
 	@Provides
-	fun provideProcessCameraProvider(context: Context): ListenableFuture<ProcessCameraProvider> {
-		return ProcessCameraProvider.getInstance(context)
+	fun provideProcessCameraProvider(@ApplicationContext context: Context): ProcessCameraProvider {
+		return ProcessCameraProvider.getInstance(context).get()
 	}
 
 //	@Provides
