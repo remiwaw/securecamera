@@ -3,11 +3,15 @@ package com.rwawrzyniak.securephotos.ui.main.takepicture.usecase
 import android.content.Context
 import androidx.camera.core.ImageCapture
 import com.rwawrzyniak.securephotos.R
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class CreateImageCaptureStorageOptions(private val context: Context) {
+class CreateImageCaptureStorageOptions @Inject constructor
+	(@ActivityContext private val context: Context) {
 
 	fun createOutputOptions(): Pair<ImageCapture.OutputFileOptions, File> {
 		val photoFile = File(

@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ImageDto
 import kotlinx.android.synthetic.main.image_item_in_grid_layout.view.*
+import javax.inject.Inject
 
 // source: https://acomputerengineer.com/2019/05/09/display-image-grid-in-recyclerview-in-kotlin-android/
-class ImagesGridAdapter : PagingDataAdapter<ImageDto, ImagesGridAdapter.ImageViewHolder>(DIFFER){
+class ImagesGridAdapter @Inject constructor(): PagingDataAdapter<ImageDto, ImagesGridAdapter.ImageViewHolder>(DIFFER){
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder =
 		ImageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.image_item_in_grid_layout, parent, false))

@@ -25,9 +25,8 @@ import kotlinx.coroutines.flow.*
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
+class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGridAdapter) : Fragment(R.layout.preview_photos_fragment) {
 	private val viewModel: PreviewPhotosViewModelImpl by viewModels()
-	private val imagesGridAdapter = ImagesGridAdapter()
 	private lateinit var andStoragePermissionFragment: PermissionFragment
 
 	private val loadStateListener = fun(combinedLoadStates: CombinedLoadStates) {
@@ -83,13 +82,13 @@ class PreviewPhotosFragment : Fragment(R.layout.preview_photos_fragment) {
 
 	private suspend fun handleStateChanges(state: PreviewPhotosViewModel.PreviewPhotosViewState) {
 		if(!andStoragePermissionFragment.checkPermission()){
-			showPermissionPernamentlyDeniedPopup(requireContext())
+			showPermissionPermanentlyDeniedPopup(requireContext())
 			findNavController().popBackStack()
 		}
 		state.pagingDataFlow?.let { showImages(it) }
 	}
 
-	private fun showPermissionPernamentlyDeniedPopup(context: Context) {
+	private fun showPermissionPermanentlyDeniedPopup(context: Context) {
 		Toast.makeText(
 			context,
 			context.getString(R.string.storage_permission_denied_permanently),

@@ -8,31 +8,33 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDao
+import dagger.hilt.android.qualifiers.ActivityContext
 import java.io.File
 import java.util.concurrent.Executor
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 // source: https://danielecampogiani.com/blog/2020/08/card-scanner-on-android-using-camerax-and-mlkit/
-class StartCameraUseCase(
+class StartCameraUseCase @Inject constructor(
 	private val createImageCaptureStorageOptions: CreateImageCaptureStorageOptions,
-	private val context: Context,
-	private val lifecycleOwner: LifecycleOwner,
+	@ActivityContext private val context: Context,
 	private val imagesDao: ImagesDao
 ) {
 
 	private var imageCapture: ImageCapture? = null
 
-	suspend fun startCamera(previewView: PreviewView){
+	suspend fun startCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner){
 		imageCapture = bindUseCases(context.getCameraProvider(), previewView, lifecycleOwner)
 	}
 
 	suspend fun takePicture(
-		previewView: PreviewView
+		previewView: PreviewView,
+		lifecycleOwner: LifecycleOwner
 	){
 		if(imageCapture == null){
-			startCamera(previewView)
+			startCamera(previewView, lifecycleOwner)
 		}
 		requireNotNull(imageCapture).takePicture(context.executor)
 	}
