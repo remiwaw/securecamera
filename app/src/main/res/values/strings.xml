@@ -4,7 +4,7 @@
 	<string name="hello_blank_fragment">Hello blank fragment</string>
 	<string name="camera_permission_denied_permanently">"Camera permission denied permanently! Change it in settings",</string>
 
-	<string name="rationale_title">Camera permission needed!</string>
-	<string name="rationale_description">To use this function you have to grant camera permission.</string>
+	<string name="rationale_title">Permision needed!</string>
+	<string name="rationale_description">To use this function you have to grant following access: </string>
     <string name="no_data_available">No data available</string>
 </resources>

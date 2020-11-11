@@ -2,7 +2,6 @@ package com.rwawrzyniak.securephotos.ui.main.permissions
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.content.ContextCompat
@@ -12,19 +11,21 @@ import com.rwawrzyniak.securephotos.ext.getOrAddFragment
 import kotlinx.coroutines.CompletableDeferred
 
 // source: https://geoffreymetais.github.io/code/runtime-permissions/#deferred-behavior
-class CameraAndStoragePermissionFragment : Fragment() {
-	suspend fun checkPermission(): Boolean = if (hasPermissions(this.requireContext())) {
+class PermissionFragment : Fragment() {
+	suspend fun checkPermission(): Boolean = if (hasPermissions()) {
 		true
 	} else {
+		requestPermissions()
 		awaitGrant()
 	}
 
 	private val deferredGrant = CompletableDeferred<Boolean>()
 	private suspend fun awaitGrant(): Boolean = deferredGrant.await()
+	private lateinit var permissions: Array<String>
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		requestPermissions()
+		permissions = requireNotNull(requireArguments().getStringArray(PERMISSIONS_ARG))
 	}
 
 	override fun onRequestPermissionsResult(
@@ -41,7 +42,9 @@ class CameraAndStoragePermissionFragment : Fragment() {
 						|| shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)-> {
 					showRationaleDialog(
 						getString(R.string.rationale_title),
-						getString(R.string.rationale_description)
+						getString(R.string.rationale_description) + permissions.reduce {
+								acc, s -> "${translatePermission(acc)} , ${translatePermission(s)}"
+						}
 					)
 				}
 				else -> {
@@ -49,6 +52,17 @@ class CameraAndStoragePermissionFragment : Fragment() {
 				}
 			}
 		}
+	}
+
+	private fun translatePermission(permission : String): CharSequence {
+		val packageManager = requireContext().packageManager
+		val permissionInfo = packageManager.getPermissionInfo(permission, 0)
+		val permissionGroupInfo = packageManager.getPermissionGroupInfo(permissionInfo.group, 0)
+		return permissionGroupInfo.loadLabel(packageManager).toString()
+	}
+
+	private fun hasPermissions() = permissions.all {
+		ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
 	}
 
 	private fun showRationaleDialog(
@@ -65,10 +79,10 @@ class CameraAndStoragePermissionFragment : Fragment() {
     private fun requestPermissions() {
 		// TODO deal with deprecation
 		@Suppress("DEPRECATION")
-		(requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS))
+		(requestPermissions(permissions, REQUEST_CODE_PERMISSIONS))
 	}
 
-	private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+	private fun allPermissionsGranted() = permissions.all {
 		ContextCompat.checkSelfPermission(
             this.requireContext(), it
         ) == PackageManager.PERMISSION_GRANTED
@@ -76,15 +90,13 @@ class CameraAndStoragePermissionFragment : Fragment() {
 
 	companion object {
 		private const val REQUEST_CODE_PERMISSIONS = 10
-		private val REQUIRED_PERMISSIONS = arrayOf(
-			Manifest.permission.CAMERA,
-			Manifest.permission.WRITE_EXTERNAL_STORAGE
-		)
-		private fun hasPermissions(context: Context) = REQUIRED_PERMISSIONS.all {
-			ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-		}
+		private const val PERMISSIONS_ARG = "PERMISSIONS_BUDLE_ARG"
 
-		fun Fragment.createAndCommitPermissionFragment(tag: String) : CameraAndStoragePermissionFragment =
-			getOrAddFragment(tag = tag) { CameraAndStoragePermissionFragment() }
-	}
+		fun Fragment.createAndCommitPermissionFragment(tag: String, permissions: Array<String>) : PermissionFragment =
+			getOrAddFragment(tag = tag) { PermissionFragment()
+				.apply {
+					arguments = Bundle().apply {
+						putStringArray(PERMISSIONS_ARG, permissions) }}
+					}
+			}
 }
