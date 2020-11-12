@@ -1,6 +1,6 @@
 <resources>
 	<string name="app_name">SecurePhotos</string>
-	<string name="storage_and_camera_permission_denied_permanently">"Camera permission denied permanently! Change it in settings",</string>
+	<string name="storage_and_camera_permission_denied_permanently">"Camera and/or storage permission denied permanently! Change it in settings",</string>
 	<string name="storage_permission_denied_permanently">"Camera permission denied permanently! Change it in settings",</string>
 
 	<string name="rationale_title">Permision needed!</string>
@@ -9,4 +9,5 @@
 	<string name="take_photo">Take Photo</string>
 	<string name="open_camera">Open camera</string>
 	<string name="view_photos">View photos</string>
+    <string name="capture_button_alt">TakePicture</string>
 </resources>

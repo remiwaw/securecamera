@@ -5,10 +5,10 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel.TakePictureViewEffect.CheckPermissions
+import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel.TakePictureViewEffect.StartCameraPreview
 import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel.TakePictureViewEffect.TakePicture
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -21,7 +21,7 @@ internal abstract class TakePictureViewModel : ViewModel() {
 
 	internal sealed class TakePictureViewEffect{
 		object TakePicture : TakePictureViewEffect()
-		object CheckPermissions : TakePictureViewEffect()
+		object StartCameraPreview : TakePictureViewEffect()
 	}
 
 	abstract fun onAction(action: TakePhotosViewAction)
@@ -39,13 +39,13 @@ internal class TakePictureViewModelImpl @ViewModelInject constructor(
 	override fun observeEffect(): SharedFlow<TakePictureViewEffect> = _effects.asSharedFlow()
 
 	override fun onAction(action: TakePhotosViewAction){
-		viewModelScope.launch {
+		viewModelScope.launch(Dispatchers.Main) {
 			_actionChannel.emit(action)
 		}
 	}
 
 	init {
-		viewModelScope.launch {
+		viewModelScope.launch(Dispatchers.IO) {
 			handleActions()
 		}
 	}
@@ -54,7 +54,7 @@ internal class TakePictureViewModelImpl @ViewModelInject constructor(
 		_actionChannel.asSharedFlow().collect { action ->
 			when (action) {
 				TakePhotosViewAction.TakePictureButtonClicked -> _effects.emit(TakePicture)
-				TakePhotosViewAction.Initialize -> _effects.emit(CheckPermissions)
+				TakePhotosViewAction.Initialize -> _effects.emit(StartCameraPreview)
 			}
 		}
 	}

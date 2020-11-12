@@ -1,43 +1,82 @@
 package com.rwawrzyniak.securephotos.ui.main.takepicture.usecase
 
 import android.content.Context
+import android.hardware.display.DisplayManager
 import android.util.Log
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDao
 import dagger.hilt.android.qualifiers.ActivityContext
+import kotlinx.coroutines.CompletableDeferred
 import java.io.File
 import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 // source: https://danielecampogiani.com/blog/2020/08/card-scanner-on-android-using-camerax-and-mlkit/
 class StartCameraUseCase @Inject constructor(
 	private val createImageCaptureStorageOptions: CreateImageCaptureStorageOptions,
 	@ActivityContext private val context: Context,
 	private val imagesDao: ImagesDao,
-	private val cameraProvider: ProcessCameraProvider
-) {
+	private val cameraProvider: ProcessCameraProvider,
+	private val displayManager: DisplayManager
+) : LifecycleObserver {
+	private lateinit var cameraExecutor: ExecutorService
+	private lateinit var imageCapture: ImageCapture
+	private var previewView: PreviewView? = null
+	private var displayId: Int = -1
 
-	private var imageCapture: ImageCapture? = null
-
-	fun startCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner){
-		imageCapture = bindUseCases(previewView, lifecycleOwner)
+	private val displayListener = object : DisplayManager.DisplayListener {
+		override fun onDisplayAdded(displayId: Int) = Unit
+		override fun onDisplayRemoved(displayId: Int) = Unit
+		override fun onDisplayChanged(displayId: Int) = previewView?.let { view ->
+			if (displayId == this@StartCameraUseCase.displayId) {
+				imageCapture.targetRotation = view.display.rotation
+			}
+		} ?: Unit
 	}
 
-	suspend fun takePicture(
+	init {
+		displayManager.registerDisplayListener(displayListener, null)
+	}
+
+	fun registerLifecycle(lifecycle : Lifecycle){
+		lifecycle.addObserver(this)
+	}
+
+	@OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+	fun onDestroyFragment() {
+		// Shut down our background executor
+		cameraExecutor.shutdown()
+		displayManager.unregisterDisplayListener(displayListener)
+	}
+
+	@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+	fun onFragmentCreated() {
+		cameraExecutor = Executors.newSingleThreadExecutor()
+	}
+
+
+	fun startCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner){
+		this.previewView = previewView
+		imageCapture = bindUseCases(previewView, lifecycleOwner)
+		displayId = previewView.display.displayId
+	}
+
+	fun takePicture(
 		previewView: PreviewView,
 		lifecycleOwner: LifecycleOwner
-	){
-		if(imageCapture == null){
+	): CompletableDeferred<String> {
+		if(!::imageCapture.isInitialized){
 			startCamera(previewView, lifecycleOwner)
 		}
-		requireNotNull(imageCapture).takePicture(context.executor)
+		return requireNotNull(imageCapture).takePicture(cameraExecutor)
 	}
 
 	private fun bindUseCases(
@@ -71,49 +110,46 @@ class StartCameraUseCase @Inject constructor(
 		.build()
 
 
-	private suspend fun ImageCapture.takePicture(executor: Executor): ImageProxy {
-		return suspendCoroutine { continuation ->
+	private fun ImageCapture.takePicture(executor: Executor): CompletableDeferred<String> {
 
-            val createOutputOptionsAndFilePair: Pair<ImageCapture.OutputFileOptions, File> =
-                createImageCaptureStorageOptions.createOutputOptions()
+		val makePhotoResult = CompletableDeferred<String>()
 
-            takePicture(
-                createOutputOptionsAndFilePair.first,
-                executor,
-                object : ImageCapture.OnImageCapturedCallback(),
-                    ImageCapture.OnImageSavedCallback {
+		val createOutputOptionsAndFilePair: Pair<ImageCapture.OutputFileOptions, File> =
+			createImageCaptureStorageOptions.createOutputOptions()
 
-                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        // This api is not clear, outputFileResults.savedUri is not null ONLY if file was saved using MediaStore
-                        val savedImage = createOutputOptionsAndFilePair.second
-                        imagesDao.save(savedImage.name, savedImage.readBytes())
-                        // We delete image, we want to save only encrypted version.
-                        savedImage.delete()
-                        Log.d(TAG, "image saved:${savedImage.name}")
-                    }
+		takePicture(
+			createOutputOptionsAndFilePair.first,
+			executor,
+			object : ImageCapture.OnImageCapturedCallback(),
+				ImageCapture.OnImageSavedCallback {
 
-                    override fun onCaptureSuccess(image: ImageProxy) {
-                        Log.d(TAG, "Photo capture sucess")
-                        continuation.resume(image)
-                        super.onCaptureSuccess(image)
-                    }
+				override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+					// This api is not clear, outputFileResults.savedUri is not null ONLY if file was saved using MediaStore
+					val savedImage = createOutputOptionsAndFilePair.second
+					imagesDao.save(savedImage.name, savedImage.readBytes())
+					makePhotoResult.complete("ImageSaved" + savedImage.name)
 
-                    override fun onError(exception: ImageCaptureException) {
-                        Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
+					// We delete image, we want to save only encrypted version.
+					savedImage.delete()
+					Log.d(TAG, "image saved:${savedImage.name}")
+				}
 
-                        // TODO handle exception
-                        continuation.resumeWithException(exception)
-                        super.onError(exception)
-                    }
-                })
-        }
+				override fun onCaptureSuccess(image: ImageProxy) {
+					Log.d(TAG, "Photo capture sucess")
+					super.onCaptureSuccess(image)
+				}
+
+				override fun onError(exception: ImageCaptureException) {
+					Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
+					makePhotoResult.complete("Photo capture failed: ${exception.message}")
+
+					// TODO handle exception
+					super.onError(exception)
+				}
+			})
+
+		return makePhotoResult
 	}
-
-	private fun Context.getCameraProvider(): ProcessCameraProvider =
-		ProcessCameraProvider.getInstance(this).get()
-
-	private val Context.executor: Executor
-		get() = ContextCompat.getMainExecutor(this)
 
 	companion object {
 		private const val TAG = "CameraXStartCamera"
