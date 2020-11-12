@@ -2,7 +2,7 @@ package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource
 
 import com.rwawrzyniak.securephotos.core.android.DataState
 import com.rwawrzyniak.securephotos.ext.toByteArray
-import com.rwawrzyniak.securephotos.ui.main.EncryptDecryptDataUseCase
+import com.rwawrzyniak.securephotos.ui.main.encryption.usecase.EncryptDecryptDataUseCase
 import java.io.File
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ class  ImagesRepository @Inject constructor(
 		return if(encryptedFiles is DataState.Success){
 			DataState.Success(encryptedFiles.data.map { file -> ImageEntity(
 				title = file.name,
-				byteArray = encryptDecryptDataUseCase.decrypt(file.name, file.toByteArray())
+				byteArray = encryptDecryptDataUseCase.decrypt(file)
 			) })
 		} else if(encryptedFiles is DataState.Error) {
 			DataState.Error(encryptedFiles.exception)
