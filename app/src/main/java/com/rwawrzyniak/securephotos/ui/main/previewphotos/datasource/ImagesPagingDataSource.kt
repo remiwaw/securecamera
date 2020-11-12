@@ -8,22 +8,18 @@ import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.Imag
 import java.io.File
 import javax.inject.Inject
 
-class ImagesDataSource @Inject constructor(
-    private val imagesDao: ImagesDao,
+class ImagesPagingDataSource @Inject constructor(
+    private val imagesRepository: ImagesRepository,
 	private val imageMapper: ImageMapper
 ) : PagingSource<Int, ImageDto>() {
 
 	override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ImageDto> {
 		val pageNumber = params.key ?: INITIAL_PAGE
 		val pageSize = params.loadSize
-		val dataState: DataState<List<File>> = imagesDao.load(pageNumber, pageSize)
+		val dataState: DataState<List<ImageEntity>> = imagesRepository.loadAndDecrypt(pageNumber, pageSize)
 		return when (dataState) {
 			is DataState.Success -> {
-				val imageEntities = dataState.data.map {
-					imageMapper.mapFromEntity(
-						ImageEntity(it.name, it.readBytes())
-					)
-				}
+				val imageEntities = dataState.data.map { imageEntity -> imageMapper.mapFromEntity(imageEntity) }
 				mapToLoadResult(imageEntities, params)
 			}
 			is Error -> LoadResult.Error(dataState.exception)

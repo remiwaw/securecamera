@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDao
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesRepository
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.CompletableDeferred
 import java.io.File
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class StartCameraUseCase @Inject constructor(
 	private val createImageCaptureStorageOptions: CreateImageCaptureStorageOptions,
 	@ActivityContext private val context: Context,
-	private val imagesDao: ImagesDao,
+	private val imagesRepository: ImagesRepository,
 	private val cameraProvider: ProcessCameraProvider,
 	private val displayManager: DisplayManager
 ) : LifecycleObserver {
@@ -126,11 +127,8 @@ class StartCameraUseCase @Inject constructor(
 				override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
 					// This api is not clear, outputFileResults.savedUri is not null ONLY if file was saved using MediaStore
 					val savedImage = createOutputOptionsAndFilePair.second
-					imagesDao.save(savedImage.name, savedImage.readBytes())
+					imagesRepository.saveAndEncrypt(savedImage)
 					makePhotoResult.complete("ImageSaved" + savedImage.name)
-
-					// We delete image, we want to save only encrypted version.
-					savedImage.delete()
 					Log.d(TAG, "image saved:${savedImage.name}")
 				}
 

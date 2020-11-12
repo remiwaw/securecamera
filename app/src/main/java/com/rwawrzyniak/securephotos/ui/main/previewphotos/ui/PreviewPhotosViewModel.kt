@@ -10,7 +10,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDataSource
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesPagingDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -36,7 +36,7 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 @ExperimentalCoroutinesApi
 internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	@Assisted private val savedStateHandle: SavedStateHandle,
-	private val imagesDataSource: ImagesDataSource
+	private val imagesPagingDataSource: ImagesPagingDataSource
 ) : PreviewPhotosViewModel() {
 
 	private val actionChannel = Channel<PreviewPhotosViewAction>(Channel.UNLIMITED)
@@ -87,7 +87,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 			prefetchDistance = PREFETCH_DISTANCE
 		)
 
-		return Pager(config, initialKey = 1, pagingSourceFactory = { imagesDataSource })
+		return Pager(config, initialKey = 1, pagingSourceFactory = { imagesPagingDataSource })
 			.flow
 			.cachedIn(viewModelScope)
 	}
