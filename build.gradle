@@ -1,4 +1,7 @@
 buildscript {
+	ext {
+		security_crypto_version = '1.0.0-alpha02'
+	}
 
 	apply from: rootProject.file('dependencies.gradle')
 

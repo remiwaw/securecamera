@@ -3,7 +3,6 @@ package com.rwawrzyniak.securephotos.ui.main.encryption.usecase
 import androidx.annotation.VisibleForTesting
 import com.rwawrzyniak.securephotos.ext.toByteArray
 import com.rwawrzyniak.securephotos.ui.main.encryption.AESInitializer
-import com.rwawrzyniak.securephotos.ui.main.encryption.AndroidKeyStore.Companion.KEY_STORE_NAME
 import com.rwawrzyniak.securephotos.ui.main.encryption.FindOrCreateKeyUseCase
 import com.rwawrzyniak.securephotos.ui.main.encryption.Mode
 import java.io.File
@@ -34,5 +33,5 @@ class EncryptDecryptDataUseCase @VisibleForTesting @Inject internal constructor(
 	}
 
 	private fun findOrCreateKey() =
-		findOrCreateKeyUseCase.findOrCreateKey(KEY_STORE_NAME)
+		findOrCreateKeyUseCase.findOrCreateKey()
 }
