@@ -1,15 +1,13 @@
 package com.rwawrzyniak.securephotos
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.rwawrzyniak.securephotos.core.android.OnBackPressedListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -25,6 +23,17 @@ class MainActivity : AppCompatActivity(R.layout.main_activity){
 		appBarConfiguration = AppBarConfiguration(navController.graph)
 		setupActionBarWithNavController(navController, appBarConfiguration)
 
+	}
+
+	override fun onBackPressed() {
+
+		val navHostFragment =
+			this.supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
+		val currentFragment =
+			navHostFragment?.childFragmentManager?.fragments?.get(0) as? OnBackPressedListener
+		currentFragment?.ignoreBackPress()?.takeIf { !it }?.let {
+			super.onBackPressed()
+		}
 	}
 
 	override fun onResume() {

@@ -3,12 +3,12 @@ package com.rwawrzyniak.securephotos.ui.main.appcode
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.core.android.BasicFragment
+import com.rwawrzyniak.securephotos.core.android.OnBackPressedListener
 import com.rwawrzyniak.securephotos.ui.main.appcode.AppCodeViewModel.AppCodeViewAction.SubmitButtonClicked
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_app_code.*
@@ -25,6 +25,9 @@ class AppCodeFragment : BasicFragment(R.layout.fragment_app_code) {
 		super.onResume()
 		hideBackButton()
 	}
+
+
+	override fun ignoreBackPress() = true
 
 	private fun hideBackButton() {
 		(requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
