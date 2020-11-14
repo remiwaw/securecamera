@@ -14,11 +14,25 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(R.layout.main_activity){
+class MainActivity : AppCompatActivity(R.layout.main_activity) {
 	private lateinit var appBarConfiguration: AppBarConfiguration
+	private var lastOrientation = 0
+
+	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+		super.onRestoreInstanceState(savedInstanceState)
+		lastOrientation = savedInstanceState.getInt(KEY_LAST_ORIENTATION)
+	}
+
+	override fun onSaveInstanceState(outState: Bundle) {
+		super.onSaveInstanceState(outState)
+		outState.putInt(KEY_LAST_ORIENTATION, lastOrientation)
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		if (savedInstanceState == null) {
+			lastOrientation = resources.configuration.orientation;
+		}
 		val navController = getNavController()
 		appBarConfiguration = AppBarConfiguration(navController.graph)
 		setupActionBarWithNavController(navController, appBarConfiguration)
@@ -56,8 +70,23 @@ class MainActivity : AppCompatActivity(R.layout.main_activity){
 
 	private fun navigateToAppCodeScreenIfNotAlreadyDisplayed(navController: NavController) {
 		// TODO avoid hardcoded label for fragment
-		// TODO Block ON Back if appCode screen displayed
-		if (navController.currentDestination?.label ?: -1 != "AppCodeFragment")
+		if (checkOrientationChanged().not() && shouldDisplayAppCode(navController))
 			navController.navigate(R.id.action_global_appCodeFragment)
+	}
+
+	private fun shouldDisplayAppCode(navController: NavController) =
+		navController.currentDestination?.label ?: -1 != "AppCodeFragment"
+
+	private fun checkOrientationChanged(): Boolean {
+		val currentOrientation = resources.configuration.orientation
+		if (currentOrientation != lastOrientation) {
+			lastOrientation = currentOrientation
+			return true
+		}
+		return false
+	}
+
+	companion object {
+		const val KEY_LAST_ORIENTATION = "last_orientation"
 	}
 }
