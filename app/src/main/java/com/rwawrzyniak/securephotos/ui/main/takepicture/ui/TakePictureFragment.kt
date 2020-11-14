@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rwawrzyniak.securephotos.R
+import com.rwawrzyniak.securephotos.core.android.BasicFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment.Companion.createAndCommitPermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel.TakePhotosViewAction.TakePictureButtonClicked
@@ -27,7 +28,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TakePictureFragment @Inject constructor(private val startCameraUseCase: StartCameraUseCase) : Fragment(R.layout.take_picture_fragment) {
+class TakePictureFragment @Inject constructor(private val startCameraUseCase: StartCameraUseCase) : BasicFragment(R.layout.take_picture_fragment) {
 
 	private lateinit var container: ConstraintLayout
 	private lateinit var viewFinder: PreviewView

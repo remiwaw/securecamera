@@ -14,6 +14,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.rwawrzyniak.securephotos.R
+import com.rwawrzyniak.securephotos.core.android.BasicFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment.Companion.createAndCommitPermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
@@ -24,7 +25,7 @@ import kotlinx.coroutines.flow.*
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGridAdapter) : Fragment(R.layout.preview_photos_fragment) {
+class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGridAdapter) : BasicFragment(R.layout.preview_photos_fragment) {
 	private val viewModel: PreviewPhotosViewModelImpl by viewModels()
 	private lateinit var andStoragePermissionFragment: PermissionFragment
 
