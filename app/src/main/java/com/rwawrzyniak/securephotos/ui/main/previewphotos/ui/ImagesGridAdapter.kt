@@ -21,17 +21,12 @@ class ImagesGridAdapter @Inject constructor(): PagingDataAdapter<ImageDto, Image
 		val imageDto: ImageDto? = getItem(position)
 
 		imageDto?.let {
-			// TODO maybe resize it before? com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageMapper.mapFromEntity
-//			.resize(250, 250)
-//			.centerCrop()
-
 			holder.iv.setImageBitmap(imageDto.bitmap)
 			holder.iv.setOnClickListener {
-				//handle click event on image
+				// TODO here could we show image in full resolution.
 			}
 		}
 	}
-
 
 	class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 		val iv = view.iv as ImageView

@@ -61,7 +61,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	override fun observeState(): Flow<PreviewPhotosViewState> = state
 
 	override fun onAction(action: PreviewPhotosViewAction){
-		viewModelScope.launch(Dispatchers.Main) {
+		viewModelScope.launch {
 			_actionChannel.emit(action)
 		}
 	}
@@ -118,7 +118,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 		PreviewPhotosViewState(pagingDataFlow = pagingDataFlow)
 
 	internal companion object {
-		const val PAGE_SIZE = 30
-		const val PREFETCH_DISTANCE = 10
+		const val PAGE_SIZE = 6
+		const val PREFETCH_DISTANCE = 6
 	}
 }

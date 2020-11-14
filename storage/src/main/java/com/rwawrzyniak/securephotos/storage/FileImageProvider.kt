@@ -6,13 +6,11 @@ import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 
-// TODO move to storage module
 class FileImageProvider @Inject constructor(){
 
 	fun readFilesPaged(pageNumber: Int, pageSize: Int): DataState<List<File>> {
 		return  try {
 			if(!isExternalStorageReadable()){
-				// TODO replace with correct / default exception
                 DataState.Error(Exception("External storage not readable"))
 			}
 
@@ -27,7 +25,7 @@ class FileImageProvider @Inject constructor(){
 			val startIndex = if(pageNumber == 1) {
 				0
 			} else {
-				if((pageNumber-1*pageSize)-1 > allFiles.size-1) 0 else (pageNumber-1*pageSize)-1
+				pageNumber*pageSize-pageSize
 			}
 
 			val endIndex = if(pageNumber*pageSize > allFiles.size) allFiles.size else pageNumber*pageSize
@@ -40,9 +38,9 @@ class FileImageProvider @Inject constructor(){
 
 	fun save(fileName: String, byteArray: ByteArray): DataState<Unit> = try {
 		if(!isExternalStorageWritable()){
-			// TODO replace with correct / default exception
             DataState.Error(Exception("External storage not writable"))
 		}
+
 		val dir = getDir()
 		dir.mkdirs()
 
