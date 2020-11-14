@@ -1,5 +1,6 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos.ui
 
+import android.content.res.Resources
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
@@ -9,16 +10,19 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesPagingDataSource
+import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 internal abstract class PreviewPhotosViewModel : ViewModel() {
 
 	internal sealed class PreviewPhotosViewAction {
+		data class OnLoadingFailed(val error: Throwable) : PreviewPhotosViewAction()
 		data class OnLoadingFinished(val itemCount: Int) : PreviewPhotosViewAction()
 		object Initialize : PreviewPhotosViewAction()
 	}
@@ -28,26 +32,38 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 		val isEmpty: Boolean = true
 	)
 
+	internal sealed class PreviewPhotosViewEffect{
+		data class ShowToastError(val errorMessage: String) : PreviewPhotosViewEffect()
+	}
+
 	abstract fun observeState(): Flow<PreviewPhotosViewState>
 	abstract fun onAction(action: PreviewPhotosViewAction)
+	abstract fun observeEffect(): SharedFlow<PreviewPhotosViewEffect>
 }
 
 
 @ExperimentalCoroutinesApi
 internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	@Assisted private val savedStateHandle: SavedStateHandle,
-	private val imagesPagingDataSource: ImagesPagingDataSource
+	private val imagesPagingDataSource: ImagesPagingDataSource,
+	private val resources: Resources
 ) : PreviewPhotosViewModel() {
 
-	private val actionChannel = Channel<PreviewPhotosViewAction>(Channel.UNLIMITED)
+	private val _actionChannel = MutableSharedFlow<PreviewPhotosViewAction>()
 	private val _state = MutableStateFlow(PreviewPhotosViewState())
 	private val state: StateFlow<PreviewPhotosViewState>
 		get() = _state
 
+	private val _effects = MutableSharedFlow<PreviewPhotosViewEffect>()
+
+	override fun observeEffect(): SharedFlow<PreviewPhotosViewEffect> = _effects.asSharedFlow()
+
 	override fun observeState(): Flow<PreviewPhotosViewState> = state
 
-	override fun onAction(action: PreviewPhotosViewAction) {
-		actionChannel.offer(action)
+	override fun onAction(action: PreviewPhotosViewAction){
+		viewModelScope.launch(Dispatchers.Main) {
+			_actionChannel.emit(action)
+		}
 	}
 
 	init {
@@ -58,7 +74,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	}
 
 	private suspend fun handleActions() {
-		actionChannel.consumeAsFlow().collect { action ->
+		_actionChannel.asSharedFlow().collect { action ->
 			when (action) {
 				is PreviewPhotosViewAction.OnLoadingFinished -> {
 					if (action.itemCount == 0) {
@@ -68,8 +84,14 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 					}
 				}
 				PreviewPhotosViewAction.Initialize -> _state.value = onInitialize()
+				is PreviewPhotosViewAction.OnLoadingFailed -> onLoadingFailed(action.error)
 			}
 		}
+	}
+
+	private suspend fun onLoadingFailed(error: Throwable) {
+		val errorMessage = error.message ?: resources.getString(R.string.error_loading_images)
+		_effects.emit(PreviewPhotosViewEffect.ShowToastError(errorMessage))
 	}
 
 	private fun prepareLisLoadingCompleteState(): PreviewPhotosViewState =

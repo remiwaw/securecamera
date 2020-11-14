@@ -23,7 +23,7 @@ class ImagesPagingDataSource @Inject constructor(
 				mapToLoadResult(imageEntities, params)
 			}
 			is Error -> LoadResult.Error(dataState.exception)
-			else -> throw error("Not supported type")
+			else -> throw IllegalArgumentException("Not supported type")
 		}
 	}
 

@@ -1,7 +1,8 @@
 <resources>
 	<string name="app_name">SecurePhotos</string>
-	<string name="storage_and_camera_permission_denied_permanently">"Camera and/or storage permission denied permanently! Change it in settings",</string>
+	<string name="storage_and_camera_permission_denied_permanently">"Camera and/or storage permission denied permanently! Change it in settings"</string>
 	<string name="storage_permission_denied_permanently">"Camera permission denied permanently! Change it in settings",</string>
+	<string name="error_loading_images">Error loading images</string>
 
 	<string name="rationale_title">Permision needed!</string>
 	<string name="rationale_description">To use this function you have to grant following access: </string>

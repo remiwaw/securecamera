@@ -17,6 +17,9 @@ import com.rwawrzyniak.securephotos.core.android.BasicFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment.Companion.createAndCommitPermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosViewModel.PreviewPhotosViewAction.OnLoadingFailed
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosViewModel.PreviewPhotosViewAction.OnLoadingFinished
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosViewModel.PreviewPhotosViewEffect
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preview_photos_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,8 +33,9 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 	private var shouldSkipAppCode = false
 
 	private val loadStateListener = fun(combinedLoadStates: CombinedLoadStates) {
-		when (combinedLoadStates.source.refresh) {
+		when (val state = combinedLoadStates.source.refresh) {
 			is LoadState.NotLoading -> onLoadingFinished()
+			is LoadState.Error -> onLoadingError(state.error)
 		}
 	}
 
@@ -83,6 +87,10 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 		viewModel.observeState()
 			.onEach { state -> handleStateChanges(state) }
 			.launchIn(lifecycleScope)
+
+		viewModel.observeEffect()
+			.onEach { effect -> handleEffectChange(effect) }
+			.launchIn(lifecycleScope)
 	}
 
 	private suspend fun handleStateChanges(state: PreviewPhotosViewModel.PreviewPhotosViewState) {
@@ -91,6 +99,24 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 			findNavController().popBackStack()
 		}
 		state.pagingDataFlow?.let { showImages(it) }
+
+		if(state.isEmpty){
+			empty_view.visibility = View.VISIBLE
+		} else {
+			empty_view.visibility = View.GONE
+		}
+	}
+
+	private fun handleEffectChange(effect: PreviewPhotosViewEffect) {
+		when(effect){
+			is PreviewPhotosViewEffect.ShowToastError -> {
+				Toast.makeText(
+					context,
+					effect.errorMessage,
+					Toast.LENGTH_LONG
+				).show()
+			}
+		}
 	}
 
 	private fun showPermissionPermanentlyDeniedPopup(context: Context) {
@@ -102,10 +128,12 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 	}
 
 	private fun onLoadingFinished() {
+		viewModel.onAction(OnLoadingFinished(imagesGridAdapter.itemCount))
+	}
+
+	private fun onLoadingError(error: Throwable) {
 		viewModel.onAction(
-			PreviewPhotosViewModel.PreviewPhotosViewAction.OnLoadingFinished(
-				imagesGridAdapter.itemCount
-			)
+			OnLoadingFailed(error)
 		)
 	}
 
@@ -119,6 +147,8 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 				)
 			}
 	}
+
+
 
 	companion object {
 		private const val CAMERA_PERMISSION_FRAGMENT_TAG = "CAMERA_PERMISSION_FRAGMENT_TAG"

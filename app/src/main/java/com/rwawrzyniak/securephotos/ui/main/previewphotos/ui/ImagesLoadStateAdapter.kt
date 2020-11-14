@@ -16,6 +16,18 @@ import javax.inject.Inject
 
 internal class ImagesLoadStateAdapter @Inject constructor(private val retry: () -> Unit) : LoadStateAdapter<LoadingStateViewHolder>() {
 
+	override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadingStateViewHolder {
+		val view = LayoutInflater
+			.from(parent.context)
+			.inflate(R.layout.loading_indicator_item, parent, false)
+
+		return LoadingStateViewHolder(view, retry)
+	}
+
+	override fun onBindViewHolder(holder: LoadingStateViewHolder, loadState: LoadState) {
+		holder.bindState(loadState)
+	}
+
 	class LoadingStateViewHolder(itemView: View, retry: () -> Unit) :
 		RecyclerView.ViewHolder(itemView) {
 
@@ -40,16 +52,4 @@ internal class ImagesLoadStateAdapter @Inject constructor(private val retry: () 
 		}
 
 	}
-
-    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadingStateViewHolder {
-		val view = LayoutInflater
-			.from(parent.context)
-			.inflate(R.layout.loading_indicator_item, parent, false)
-
-		return LoadingStateViewHolder(view, retry)
-	}
-
-    override fun onBindViewHolder(holder: LoadingStateViewHolder, loadState: LoadState) {
-		holder.bindState(loadState)
-    }
 }
