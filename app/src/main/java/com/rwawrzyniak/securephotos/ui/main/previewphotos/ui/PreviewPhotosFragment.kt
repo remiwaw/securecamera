@@ -24,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preview_photos_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -82,13 +83,15 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 	}
 
 	private fun wireUpViewModel() {
-		viewModel.observeState()
-			.onEach { state -> handleStateChanges(state) }
-			.launchIn(lifecycleScope)
+		lifecycleScope.launch {
+			viewModel.observeState()
+				.collectLatest { state -> handleStateChanges(state) }
+		}
 
-		viewModel.observeEffect()
-			.onEach { effect -> handleEffectChange(effect) }
-			.launchIn(lifecycleScope)
+		lifecycleScope.launch {
+			viewModel.observeEffect()
+				.collectLatest { effect -> handleEffectChange(effect) }
+		}
 	}
 
 	private suspend fun handleStateChanges(state: PreviewPhotosViewModel.PreviewPhotosViewState) {
@@ -96,13 +99,14 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 			showPermissionPermanentlyDeniedPopup(requireContext())
 			findNavController().popBackStack()
 		}
-		state.pagingDataFlow?.let { showImages(it) }
 
 		if(state.noPhotosAvailable){
 			empty_view.visibility = View.VISIBLE
 		} else {
 			empty_view.visibility = View.GONE
 		}
+
+		state.pagingDataFlow?.let { showImages(it) }
 	}
 
 	private fun handleEffectChange(effect: PreviewPhotosViewEffect) {
@@ -136,7 +140,6 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 	}
 
 	private suspend fun showImages(pagingDataFlow: Flow<PagingData<ImageDto>>) {
-		// TODO collect or collect latest?
 		pagingDataFlow
 			.collectLatest { pagingData ->
 				imagesGridAdapter.submitData(

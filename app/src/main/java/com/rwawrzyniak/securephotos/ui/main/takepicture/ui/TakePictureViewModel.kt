@@ -36,16 +36,16 @@ internal class TakePictureViewModelImpl @ViewModelInject constructor(
 	private val _actionChannel = MutableSharedFlow<TakePhotosViewAction>()
 	private val _effects = MutableSharedFlow<TakePictureViewEffect>()
 
-	override fun observeEffect(): SharedFlow<TakePictureViewEffect> = _effects.asSharedFlow()
+	override fun observeEffect(): SharedFlow<TakePictureViewEffect> = _effects
 
 	override fun onAction(action: TakePhotosViewAction){
-		viewModelScope.launch(Dispatchers.Main) {
+		viewModelScope.launch {
 			_actionChannel.emit(action)
 		}
 	}
 
 	init {
-		viewModelScope.launch(Dispatchers.IO) {
+		viewModelScope.launch {
 			handleActions()
 		}
 	}

@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class FileImageProvider @Inject constructor(){
 
-	fun readFilesPaged(pageNumber: Int, pageSize: Int, withPrefix: String): DataState<List<File>> {
+	fun readFilesPaged(pageNumber: Int, pageSize: Int, withPrefix: String = ""): DataState<List<File>> {
 		return  try {
 			if(!isExternalStorageReadable()){
                 DataState.Error(Exception("External storage not readable"))

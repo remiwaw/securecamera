@@ -24,6 +24,8 @@ dependencies {
 	api libraries.androidx.securityCrypto
 	api libraries.androidx.materialComponents
 
+	api libraries.coil
+
 	androidTestImplementation libraries.androidx.navigationTesting
 
 }

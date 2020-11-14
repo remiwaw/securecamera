@@ -27,7 +27,8 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 
 	internal data class PreviewPhotosViewState(
 		val pagingDataFlow: Flow<PagingData<ImageDto>>? = null,
-		val noPhotosAvailable: Boolean = true
+		val noPhotosAvailable: Boolean = true,
+		val loadedImagesCount: Int = 0
 	)
 
 	internal sealed class PreviewPhotosViewEffect{
@@ -49,14 +50,12 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 
 	private val _actionChannel = MutableSharedFlow<PreviewPhotosViewAction>()
 	private val _state = MutableStateFlow(PreviewPhotosViewState())
-	private val state: StateFlow<PreviewPhotosViewState>
-		get() = _state
 
 	private val _effects = MutableSharedFlow<PreviewPhotosViewEffect>()
 
 	override fun observeEffect(): SharedFlow<PreviewPhotosViewEffect> = _effects.asSharedFlow()
 
-	override fun observeState(): Flow<PreviewPhotosViewState> = state
+	override fun observeState(): StateFlow<PreviewPhotosViewState> = _state
 
 	override fun onAction(action: PreviewPhotosViewAction){
 		viewModelScope.launch {
@@ -75,10 +74,8 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 		_actionChannel.asSharedFlow().collect { action ->
 			when (action) {
 				is PreviewPhotosViewAction.OnLoadingFinished -> {
-					if (action.itemCount == 0) {
-						_state.value = prepareListEmptyState()
-					} else {
-						_state.value = prepareLisLoadingCompleteState()
+					if (action.itemCount > 0) {
+						_state.value = prepareLisLoadingCompleteState(action.itemCount)
 					}
 				}
 				PreviewPhotosViewAction.Initialize -> _state.value = onInitialize()
@@ -92,11 +89,8 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 		_effects.emit(PreviewPhotosViewEffect.ShowToastError(errorMessage))
 	}
 
-	private fun prepareLisLoadingCompleteState(): PreviewPhotosViewState =
-		_state.value.copy(noPhotosAvailable = false)
-
-	private fun prepareListEmptyState(): PreviewPhotosViewState =
-		_state.value.copy(noPhotosAvailable = true)
+	private fun prepareLisLoadingCompleteState(itemCount: Int): PreviewPhotosViewState =
+		PreviewPhotosViewState(noPhotosAvailable = false, loadedImagesCount = itemCount)
 
 	private fun onInitialize() = updatePageList(wirePagedList())
 
@@ -104,7 +98,8 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 		val config = PagingConfig(
 			pageSize = PAGE_SIZE,
 			initialLoadSize = PAGE_SIZE,
-			prefetchDistance = PREFETCH_DISTANCE
+			prefetchDistance = PREFETCH_DISTANCE,
+			enablePlaceholders = true
 		)
 
 		return Pager(config, initialKey = 1, pagingSourceFactory = { imagesPagingDataSource })
