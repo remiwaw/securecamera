@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.core.android.BasicFragment
@@ -31,6 +32,7 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 	private val viewModel: PreviewPhotosViewModelImpl by viewModels()
 	private lateinit var permissionFragment: PermissionFragment
 	private var shouldSkipAppCode = false
+	private val imagesLoadStateAdapter by lazy { ImagesLoadStateAdapter() }
 
 	private val loadStateListener = fun(combinedLoadStates: CombinedLoadStates) {
 		when (val state = combinedLoadStates.source.refresh) {
@@ -75,11 +77,8 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 
 	private fun setupUI() {
 		with(imagesRV) {
-			layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-			adapter =  imagesGridAdapter.withLoadStateHeaderAndFooter(
-				header = ImagesLoadStateAdapter { imagesGridAdapter.retry() },
-				footer = ImagesLoadStateAdapter { imagesGridAdapter.retry() }
-			)
+			layoutManager = GridLayoutManager(context, 2)
+			adapter =  imagesGridAdapter.withLoadStateFooter(imagesLoadStateAdapter)
 		}
 	}
 

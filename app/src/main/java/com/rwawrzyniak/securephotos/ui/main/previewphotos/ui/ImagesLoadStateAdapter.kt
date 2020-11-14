@@ -14,33 +14,26 @@ import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.ImagesLoadStateAdapter.LoadingStateViewHolder
 import javax.inject.Inject
 
-internal class ImagesLoadStateAdapter @Inject constructor(private val retry: () -> Unit) : LoadStateAdapter<LoadingStateViewHolder>() {
+internal class ImagesLoadStateAdapter @Inject constructor() : LoadStateAdapter<LoadingStateViewHolder>() {
 
 	override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadingStateViewHolder {
 		val view = LayoutInflater
 			.from(parent.context)
 			.inflate(R.layout.loading_indicator_item, parent, false)
 
-		return LoadingStateViewHolder(view, retry)
+		return LoadingStateViewHolder(view)
 	}
 
 	override fun onBindViewHolder(holder: LoadingStateViewHolder, loadState: LoadState) {
 		holder.bindState(loadState)
 	}
 
-	class LoadingStateViewHolder(itemView: View, retry: () -> Unit) :
+	class LoadingStateViewHolder(itemView: View) :
 		RecyclerView.ViewHolder(itemView) {
 
 		// For some reason synthetic doesn't work
 		private val textViewErrorMessage: TextView = itemView.findViewById(R.id.textViewErrorMessage)
 		private val progressBar: ProgressBar = itemView.findViewById(R.id.progresBar)
-		private val buttonRetry: Button = itemView.findViewById(R.id.buttonRetry)
-
-		init {
-			buttonRetry.setOnClickListener {
-				retry.invoke()
-			}
-		}
 
 		fun bindState(loadState: LoadState) {
 			if (loadState is LoadState.Error) {
@@ -48,7 +41,6 @@ internal class ImagesLoadStateAdapter @Inject constructor(private val retry: () 
 			}
 			progressBar.isVisible = loadState is LoadState.Loading
 			textViewErrorMessage.isVisible = loadState !is LoadState.Loading
-			buttonRetry.isVisible = loadState !is LoadState.Loading
 		}
 
 	}
