@@ -5,9 +5,13 @@
 
 	<string name="rationale_title">Permision needed!</string>
 	<string name="rationale_description">To use this function you have to grant following access: </string>
-    <string name="no_data_available">No data available</string>
+	<string name="no_data_available">No data available</string>
 	<string name="take_photo">Take Photo</string>
 	<string name="open_camera">Open camera</string>
 	<string name="view_photos">View photos</string>
-    <string name="capture_button_alt">TakePicture</string>
+	<string name="capture_button_alt">TakePicture</string>
+	<string name="submit">submit</string>
+	<string name="passwordHint">Your password here</string>
+	<string name="provideAppCodeTitle">App locked</string>
+	<string name="inputPasswordHint">Provide your password</string>
 </resources>

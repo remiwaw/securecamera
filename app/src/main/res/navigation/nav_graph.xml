@@ -4,7 +4,6 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/nav_graph"
 	app:startDestination="@id/mainFragment">
-
 	<fragment
 		android:id="@+id/mainFragment"
 		android:name="com.rwawrzyniak.securephotos.MainFragment"
@@ -25,5 +24,11 @@
 		android:id="@+id/previewPhotosFragment"
 		android:name="com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosFragment"
 		android:label="PreviewPhotosFragment" />
-
+	<fragment
+		android:id="@+id/appCodeFragment"
+		android:name="com.rwawrzyniak.securephotos.ui.main.appcode.AppCodeFragment"
+		android:label="AppCodeFragment" />
+	<action
+		android:id="@+id/action_global_appCodeFragment"
+		app:destination="@id/appCodeFragment" />
 </navigation>
