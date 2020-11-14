@@ -3,11 +3,11 @@ package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.rwawrzyniak.securephotos.core.android.EntityMapper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
-
-// TODO introduce here decrypting! later
+@ExperimentalCoroutinesApi
 class ByteArrayBitMapMapper @Inject constructor(): EntityMapper<ByteArray, Bitmap> {
 
 	override fun mapFromEntity(byteArray: ByteArray): Bitmap {

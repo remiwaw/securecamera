@@ -36,7 +36,8 @@ ext.libraries = [
 				navigationUI      : "androidx.navigation:navigation-ui-ktx:$nav_version",
 				navigationTesting : "androidx.navigation:navigation-testing:$nav_version",
 				paging: "androidx.paging:paging-runtime-ktx:$paging_version",
-				securityCrypto: "androidx.security:security-crypto:$security_crypto_version"
+				securityCrypto: "androidx.security:security-crypto:$security_crypto_version",
+				materialComponents: "com.google.android.material:material:$material_component_version"
 		],
 
 		hilt             : [

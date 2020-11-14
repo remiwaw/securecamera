@@ -22,6 +22,7 @@ dependencies {
 	api libraries.androidx.navigationFragment
 	api libraries.androidx.navigationUI
 	api libraries.androidx.securityCrypto
+	api libraries.androidx.materialComponents
 
 	androidTestImplementation libraries.androidx.navigationTesting
 
