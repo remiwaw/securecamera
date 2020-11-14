@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class FileImageProvider @Inject constructor(){
 
-	fun readFilesPaged(pageNumber: Int, pageSize: Int): DataState<List<File>> {
+	fun readFilesPaged(pageNumber: Int, pageSize: Int, withPrefix: String): DataState<List<File>> {
 		return  try {
 			if(!isExternalStorageReadable()){
                 DataState.Error(Exception("External storage not readable"))
@@ -20,8 +20,7 @@ class FileImageProvider @Inject constructor(){
 				return DataState.Success(listOf())
 			}
 
-			// TODO make sure there is no out of bound exception
-			val allFiles = dir.listFiles().filter { it.isFile }
+			val allFiles = dir.listFiles().filter { it.isFile && it.name.contains(withPrefix) }
 			val startIndex = if(pageNumber == 1) {
 				0
 			} else {

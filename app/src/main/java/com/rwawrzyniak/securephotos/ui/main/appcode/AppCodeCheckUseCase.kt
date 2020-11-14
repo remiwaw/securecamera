@@ -1,8 +1,8 @@
 package com.rwawrzyniak.securephotos.ui.main.appcode
 
 import androidx.security.crypto.EncryptedSharedPreferences
-import com.rwawrzyniak.securephotos.Constants.ENCRYPTED_PREFS_APP_CODE_KEY
-import com.rwawrzyniak.securephotos.Constants.PLAIN_TEXT_PASSWORD
+import com.rwawrzyniak.securephotos.core.android.Constants.ENCRYPTED_PREFS_APP_CODE_KEY
+import com.rwawrzyniak.securephotos.core.android.Constants.PLAIN_TEXT_PASSWORD
 import javax.inject.Inject
 
 class AppCodeCheckUseCase @Inject internal constructor(

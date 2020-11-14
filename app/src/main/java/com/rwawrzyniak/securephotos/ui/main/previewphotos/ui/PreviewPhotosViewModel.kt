@@ -13,8 +13,6 @@ import androidx.paging.cachedIn
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesPagingDataSource
-import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -29,7 +27,7 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 
 	internal data class PreviewPhotosViewState(
 		val pagingDataFlow: Flow<PagingData<ImageDto>>? = null,
-		val isEmpty: Boolean = true
+		val noPhotosAvailable: Boolean = true
 	)
 
 	internal sealed class PreviewPhotosViewEffect{
@@ -95,10 +93,10 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	}
 
 	private fun prepareLisLoadingCompleteState(): PreviewPhotosViewState =
-		_state.value.copy(isEmpty = false)
+		_state.value.copy(noPhotosAvailable = false)
 
 	private fun prepareListEmptyState(): PreviewPhotosViewState =
-		_state.value.copy(isEmpty = true)
+		_state.value.copy(noPhotosAvailable = true)
 
 	private fun onInitialize() = updatePageList(wirePagedList())
 

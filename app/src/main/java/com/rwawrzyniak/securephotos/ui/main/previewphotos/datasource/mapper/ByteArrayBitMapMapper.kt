@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class ByteArrayBitMapMapper @Inject constructor(private val resizeBitmapUseCase: ResizeBitmapUseCase): EntityMapper<ByteArray, Bitmap> {
+class ByteArrayBitMapMapper @Inject constructor(): EntityMapper<ByteArray, Bitmap> {
 
 	override fun mapFromEntity(byteArray: ByteArray): Bitmap {
 		return BitmapFactory.decodeByteArray(
@@ -21,14 +21,11 @@ class ByteArrayBitMapMapper @Inject constructor(private val resizeBitmapUseCase:
 
 	override fun mapToEntity(bitmap: Bitmap): ByteArray {
 		val stream = ByteArrayOutputStream()
-		val compressedBitmap = resizeBitmapUseCase.resizeBitmap(bitmap, MAX_LENGTH_OR_WIDTH)
-		compressedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream)
+		bitmap.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_RATIO, stream)
 		return stream.toByteArray()
 	}
 
 	companion object {
 		private const val COMPRESSION_RATIO = 80
-		private const val MAX_LENGTH_OR_WIDTH = 400
-
 	}
 }

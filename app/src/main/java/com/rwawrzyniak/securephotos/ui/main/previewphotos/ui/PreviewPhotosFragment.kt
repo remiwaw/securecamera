@@ -12,7 +12,6 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.core.android.BasicFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment
@@ -99,7 +98,7 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 		}
 		state.pagingDataFlow?.let { showImages(it) }
 
-		if(state.isEmpty){
+		if(state.noPhotosAvailable){
 			empty_view.visibility = View.VISIBLE
 		} else {
 			empty_view.visibility = View.GONE

@@ -2,7 +2,7 @@ package com.rwawrzyniak.securephotos.ui.main.encryption
 
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
-import com.rwawrzyniak.securephotos.Constants.ENCRYPTED_PREFS_APP_CODE_KEY
+import com.rwawrzyniak.securephotos.core.android.Constants.ENCRYPTED_PREFS_APP_CODE_KEY
 import com.rwawrzyniak.securephotos.ext.fromBase64
 import com.rwawrzyniak.securephotos.ext.toBase64
 import javax.crypto.SecretKey

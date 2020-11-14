@@ -13,8 +13,10 @@ class EncryptDecryptDataUseCase @VisibleForTesting @Inject internal constructor(
 	private val aesInitializer: AESInitializer
 )  {
 
-	fun encrypt(file: File): ByteArray {
-		val plainByteArray = file.toByteArray()
+
+	fun encrypt(file: File): ByteArray = encrypt(file.toByteArray())
+
+	fun encrypt(plainByteArray: ByteArray): ByteArray {
 		val cipher = aesInitializer.initialize(Mode.ENCRYPT, findOrCreateKey())
 		val encrypted = cipher.doFinal(plainByteArray)
 		val iv = cipher.iv
