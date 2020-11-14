@@ -2,12 +2,14 @@ package com.rwawrzyniak.securephotos
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.rwawrzyniak.securephotos.core.android.OnBackPressedListener
+import com.rwawrzyniak.securephotos.core.android.ShouldSkipAppCodeListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -40,11 +42,7 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 	}
 
 	override fun onBackPressed() {
-
-		val navHostFragment =
-			this.supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
-		val currentFragment =
-			navHostFragment?.childFragmentManager?.fragments?.get(0) as? OnBackPressedListener
+		val currentFragment = getTopFragment() as? OnBackPressedListener
 		currentFragment?.ignoreBackPress()?.takeIf { !it }?.let {
 			super.onBackPressed()
 		}
@@ -61,6 +59,11 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 				|| super.onSupportNavigateUp()
 	}
 
+	private fun getTopFragment(): Fragment? {
+		val navHostFragment = this.supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
+		return navHostFragment?.childFragmentManager?.fragments?.get(0)
+	}
+
 	private fun getNavController(): NavController {
 		val navHostFragment =
 			supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -70,14 +73,18 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
 	private fun navigateToAppCodeScreenIfNotAlreadyDisplayed(navController: NavController) {
 		// TODO avoid hardcoded label for fragment
-		if (checkOrientationChanged().not() && shouldDisplayAppCode(navController))
+		if (shouldDisplayAppCode(navController))
 			navController.navigate(R.id.action_global_appCodeFragment)
 	}
 
-	private fun shouldDisplayAppCode(navController: NavController) =
-		navController.currentDestination?.label ?: -1 != "AppCodeFragment"
+	private fun shouldDisplayAppCode(navController: NavController) : Boolean {
+		val currentFragment = getTopFragment() as? ShouldSkipAppCodeListener
+		val skipAppCodeForTopFragment = currentFragment?.shouldSkipAppCode() ?: false
+		return 	isOrientationChanged().not() && skipAppCodeForTopFragment.not()
+	}
 
-	private fun checkOrientationChanged(): Boolean {
+
+	private fun isOrientationChanged(): Boolean {
 		val currentOrientation = resources.configuration.orientation
 		if (currentOrientation != lastOrientation) {
 			lastOrientation = currentOrientation

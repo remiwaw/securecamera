@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -27,7 +26,8 @@ import kotlinx.coroutines.flow.*
 @AndroidEntryPoint
 class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGridAdapter) : BasicFragment(R.layout.preview_photos_fragment) {
 	private val viewModel: PreviewPhotosViewModelImpl by viewModels()
-	private lateinit var andStoragePermissionFragment: PermissionFragment
+	private lateinit var permissionFragment: PermissionFragment
+	private var shouldSkipAppCode = false
 
 	private val loadStateListener = fun(combinedLoadStates: CombinedLoadStates) {
 		when (combinedLoadStates.source.refresh) {
@@ -38,17 +38,23 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
-		andStoragePermissionFragment = createAndCommitPermissionFragment(
+		permissionFragment = createAndCommitPermissionFragment(
 			CAMERA_PERMISSION_FRAGMENT_TAG,
 			REQUIRED_PERMISSIONS
 		)
+		shouldSkipAppCode = permissionFragment.shouldSkipAppCode()
 
 		setupUI()
 		wireUpViewModel()
 	}
 
+	override fun shouldSkipAppCode(): Boolean {
+		return shouldSkipAppCode
+	}
+
 	override fun onResume() {
 		super.onResume()
+		shouldSkipAppCode = permissionFragment.shouldSkipAppCode()
 
 		with(imagesGridAdapter) {
 			addLoadStateListener(loadStateListener)
@@ -62,7 +68,6 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 		}
 		super.onPause()
 	}
-
 
 	private fun setupUI() {
 		with(imagesRV) {
@@ -81,7 +86,7 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 	}
 
 	private suspend fun handleStateChanges(state: PreviewPhotosViewModel.PreviewPhotosViewState) {
-		if(!andStoragePermissionFragment.checkPermission()){
+		if(!permissionFragment.checkPermission()){
 			showPermissionPermanentlyDeniedPopup(requireContext())
 			findNavController().popBackStack()
 		}

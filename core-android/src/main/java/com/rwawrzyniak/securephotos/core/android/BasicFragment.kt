@@ -5,11 +5,9 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
-open class BasicFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId), OnBackPressedListener {
+open class BasicFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayoutId), OnBackPressedListener, ShouldSkipAppCodeListener {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		(requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
-
-	override fun ignoreBackPress(): Boolean = false
 }

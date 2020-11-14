@@ -6,13 +6,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 
-fun <T : Fragment> FragmentActivity.getOrAddFragment(
-    containerViewId: Int = 0,
-    tag: String? = null,
-    commitNow: Boolean = true,
-    init: () -> T
-): T = supportFragmentManager.getOrAddFragment(containerViewId, tag, commitNow, init)
-
 fun <T : Fragment> Fragment.getOrAddFragment(
     containerViewId: Int = 0,
     tag: String? = null,

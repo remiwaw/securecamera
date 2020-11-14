@@ -26,6 +26,7 @@ class AppCodeFragment : BasicFragment(R.layout.fragment_app_code) {
 		hideBackButton()
 	}
 
+	override fun shouldSkipAppCode(): Boolean = true
 
 	override fun ignoreBackPress() = true
 

@@ -35,6 +35,7 @@ class TakePictureFragment @Inject constructor(private val startCameraUseCase: St
 
 	private val viewModel: TakePictureViewModelImpl by viewModels()
 	private lateinit var permissionFragment: PermissionFragment
+	private var shouldSkipAppCode = false
 
 	@ExperimentalCoroutinesApi
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,9 +44,19 @@ class TakePictureFragment @Inject constructor(private val startCameraUseCase: St
 		viewFinder = container.findViewById(R.id.viewFinder)
 
 		permissionFragment = createAndCommitPermissionFragment(CAMERA_PERMISSION_FRAGMENT_TAG, REQUIRED_PERMISSIONS)
+		shouldSkipAppCode = permissionFragment.shouldSkipAppCode()
 		setupUI()
 
 		wireUpViewModel()
+	}
+
+	override fun onResume() {
+		super.onResume()
+		shouldSkipAppCode = permissionFragment.shouldSkipAppCode()
+	}
+
+	override fun shouldSkipAppCode(): Boolean {
+		return shouldSkipAppCode
 	}
 
 	override fun onConfigurationChanged(newConfig: Configuration) {
@@ -84,6 +95,7 @@ class TakePictureFragment @Inject constructor(private val startCameraUseCase: St
 			showPermissionPermanentlyDeniedPopup(requireContext())
 			findNavController().popBackStack()
 		}
+
 		when(effect){
 			TakePictureViewModel.TakePictureViewEffect.TakePicture -> {
 				val result = startCameraUseCase.takePicture(viewFinder, this).await()

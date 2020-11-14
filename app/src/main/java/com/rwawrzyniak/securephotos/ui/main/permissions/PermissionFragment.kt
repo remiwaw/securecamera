@@ -19,6 +19,10 @@ class PermissionFragment : Fragment() {
 		awaitGrant()
 	}
 
+	// When showing app permission activity is paused, so onResume we show appCode
+	// if there are no permission we know that permissons dialog will be shown, so we should skip appCode screen once.
+	fun shouldSkipAppCode() = hasPermissions().not()
+
 	private val deferredGrant = CompletableDeferred<Boolean>()
 	private suspend fun awaitGrant(): Boolean = deferredGrant.await()
 	private lateinit var permissions: Array<String>
