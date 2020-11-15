@@ -31,7 +31,7 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 		val loadedImagesCountText: String = ""
 	)
 
-	internal sealed class PreviewPhotosViewEffect{
+	internal sealed class PreviewPhotosViewEffect {
 		data class ShowToastError(val errorMessage: String) : PreviewPhotosViewEffect()
 	}
 
@@ -57,7 +57,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 
 	override fun observeState(): StateFlow<PreviewPhotosViewState> = _state
 
-	override fun onAction(action: PreviewPhotosViewAction){
+	override fun onAction(action: PreviewPhotosViewAction) {
 		viewModelScope.launch {
 			_actionChannel.emit(action)
 		}

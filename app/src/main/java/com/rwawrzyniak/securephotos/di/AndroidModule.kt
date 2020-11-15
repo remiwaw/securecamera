@@ -24,7 +24,7 @@ object AndroidModule {
 	@Singleton
 	@Provides
 	fun provideInputMethodManager(@ApplicationContext context: Context): InputMethodManager {
-		 return context.getSystemService(
+		return context.getSystemService(
 			Activity.INPUT_METHOD_SERVICE
 		) as InputMethodManager
 	}

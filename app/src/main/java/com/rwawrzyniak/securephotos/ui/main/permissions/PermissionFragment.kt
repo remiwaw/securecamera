@@ -43,11 +43,11 @@ class PermissionFragment : Fragment() {
 					return
 				}
 				shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
-						|| shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)-> {
+						|| shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) -> {
 					showRationaleDialog(
 						getString(R.string.rationale_title),
-						getString(R.string.rationale_description) + permissions.reduce {
-								acc, s -> "${translatePermission(acc)} , ${translatePermission(s)}"
+						getString(R.string.rationale_description) + permissions.reduce { acc, s ->
+							"${translatePermission(acc)} , ${translatePermission(s)}"
 						}
 					)
 				}
@@ -58,10 +58,11 @@ class PermissionFragment : Fragment() {
 		}
 	}
 
-	private fun translatePermission(permission : String): CharSequence {
+	private fun translatePermission(permission: String): CharSequence {
 		val packageManager = requireContext().packageManager
 		val permissionInfo = packageManager.getPermissionInfo(permission, 0)
-		val permissionGroupInfo = packageManager.getPermissionGroupInfo(permissionInfo.group, 0)
+		val permissionGroupInfo =
+			packageManager.getPermissionGroupInfo(requireNotNull(permissionInfo.group), 0)
 		return permissionGroupInfo.loadLabel(packageManager).toString()
 	}
 
@@ -80,7 +81,7 @@ class PermissionFragment : Fragment() {
 		builder.create().show()
 	}
 
-    private fun requestPermissions() {
+	private fun requestPermissions() {
 		// TODO deal with deprecation
 		@Suppress("DEPRECATION")
 		(requestPermissions(permissions, REQUEST_CODE_PERMISSIONS))
@@ -88,19 +89,25 @@ class PermissionFragment : Fragment() {
 
 	private fun allPermissionsGranted() = permissions.all {
 		ContextCompat.checkSelfPermission(
-            this.requireContext(), it
-        ) == PackageManager.PERMISSION_GRANTED
+			this.requireContext(), it
+		) == PackageManager.PERMISSION_GRANTED
 	}
 
 	companion object {
 		private const val REQUEST_CODE_PERMISSIONS = 10
 		private const val PERMISSIONS_ARG = "PERMISSIONS_BUDLE_ARG"
 
-		fun Fragment.createAndCommitPermissionFragment(tag: String, permissions: Array<String>) : PermissionFragment =
-			getOrAddFragment(tag = tag) { PermissionFragment()
-				.apply {
-					arguments = Bundle().apply {
-						putStringArray(PERMISSIONS_ARG, permissions) }}
+		fun Fragment.createAndCommitPermissionFragment(
+			tag: String,
+			permissions: Array<String>
+		): PermissionFragment =
+			getOrAddFragment(tag = tag) {
+				PermissionFragment()
+					.apply {
+						arguments = Bundle().apply {
+							putStringArray(PERMISSIONS_ARG, permissions)
+						}
 					}
 			}
+	}
 }

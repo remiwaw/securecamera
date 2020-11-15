@@ -19,7 +19,7 @@ internal abstract class TakePictureViewModel : ViewModel() {
 		object Initialize : TakePhotosViewAction()
 	}
 
-	internal sealed class TakePictureViewEffect{
+	internal sealed class TakePictureViewEffect {
 		object TakePicture : TakePictureViewEffect()
 		object StartCameraPreview : TakePictureViewEffect()
 	}
@@ -31,14 +31,14 @@ internal abstract class TakePictureViewModel : ViewModel() {
 @ExperimentalCoroutinesApi
 internal class TakePictureViewModelImpl @ViewModelInject constructor(
 	@Assisted private val savedStateHandle: SavedStateHandle
-	) : TakePictureViewModel() {
+) : TakePictureViewModel() {
 
 	private val _actionChannel = MutableSharedFlow<TakePhotosViewAction>()
 	private val _effects = MutableSharedFlow<TakePictureViewEffect>()
 
 	override fun observeEffect(): SharedFlow<TakePictureViewEffect> = _effects
 
-	override fun onAction(action: TakePhotosViewAction){
+	override fun onAction(action: TakePhotosViewAction) {
 		// this run on Main, because in the case of configuration change (i.e orientation change)
 		// previewView passed to UseCameraUseCase become null. And we need to wait for its creaton (so on Main thread)
 		viewModelScope.launch(Dispatchers.Main) {

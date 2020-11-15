@@ -6,7 +6,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CustomNavHostFragment: NavHostFragment(){
+class CustomNavHostFragment : NavHostFragment() {
 
 	@Inject
 	lateinit var fragmentFactory: CustomFragmentFactory

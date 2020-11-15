@@ -26,7 +26,8 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseCameraUseCase) : BasicFragment(R.layout.take_picture_fragment) {
+class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseCameraUseCase) :
+	BasicFragment(R.layout.take_picture_fragment) {
 
 	private lateinit var container: ConstraintLayout
 	private lateinit var previewView: PreviewView
@@ -41,7 +42,8 @@ class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseC
 		container = view as ConstraintLayout
 		previewView = container.findViewById(R.id.viewFinder)
 
-		permissionFragment = createAndCommitPermissionFragment(CAMERA_PERMISSION_FRAGMENT_TAG, REQUIRED_PERMISSIONS)
+		permissionFragment =
+			createAndCommitPermissionFragment(CAMERA_PERMISSION_FRAGMENT_TAG, REQUIRED_PERMISSIONS)
 		shouldSkipAppCode = permissionFragment.shouldSkipAppCode()
 		setupUI()
 
@@ -90,12 +92,12 @@ class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseC
 	}
 
 	private suspend fun handleEffectChange(effect: TakePictureViewModel.TakePictureViewEffect) {
-		if(!permissionFragment.checkPermission()){
+		if (!permissionFragment.checkPermission()) {
 			showPermissionPermanentlyDeniedPopup()
 			findNavController().popBackStack()
 		}
 
-		when(effect){
+		when (effect) {
 			TakePictureViewModel.TakePictureViewEffect.TakePicture -> {
 				val result = useCameraUseCase.takePicture(previewView, this).await()
 				showResultToast(result)
@@ -111,7 +113,7 @@ class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseC
 	private fun showPermissionPermanentlyDeniedPopup() {
 		Toast.makeText(
 			requireContext(),
-			requireContext().getString(R.string.storage_and_camera_permission_denied_permanently),
+			requireContext().getString(R.string.camera_permission_denied_permanently),
 			Toast.LENGTH_LONG
 		).show()
 	}
@@ -124,11 +126,10 @@ class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseC
 		).show()
 	}
 
-	companion object{
+	companion object {
 		private const val CAMERA_PERMISSION_FRAGMENT_TAG = "CAMERA_PERMISSION_FRAGMENT_TAG"
 		private val REQUIRED_PERMISSIONS = arrayOf(
-			Manifest.permission.CAMERA,
-			Manifest.permission.WRITE_EXTERNAL_STORAGE
+			Manifest.permission.CAMERA
 		)
 	}
 }

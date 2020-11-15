@@ -17,12 +17,12 @@ internal abstract class AppCodeViewModel : ViewModel() {
 		class SubmitButtonClicked(val appCode: String) : AppCodeViewAction()
 	}
 
-	internal sealed class AppCodeViewEffect{
+	internal sealed class AppCodeViewEffect {
 		object NavigateToPreviousScreen : AppCodeViewEffect()
 	}
 
 	internal data class AppCodeViewState(
-		val errorText : String = ""
+		val errorText: String = ""
 	)
 
 	abstract fun onAction(action: AppCodeViewAction)
@@ -31,7 +31,10 @@ internal abstract class AppCodeViewModel : ViewModel() {
 }
 
 @ExperimentalCoroutinesApi
-internal class AppCodeViewModelImpl @ViewModelInject constructor(private val useCase: AppCodeCheckUseCase, private val resources: Resources) : AppCodeViewModel() {
+internal class AppCodeViewModelImpl @ViewModelInject constructor(
+	private val useCase: AppCodeCheckUseCase,
+	private val resources: Resources
+) : AppCodeViewModel() {
 
 	private val _actionChannel = MutableSharedFlow<AppCodeViewAction>()
 	private val _state = MutableStateFlow(AppCodeViewState())
@@ -66,7 +69,7 @@ internal class AppCodeViewModelImpl @ViewModelInject constructor(private val use
 	}
 
 	private suspend fun onActionSubmitButtonClicked(appCode: String) {
-		if(useCase.isCorrectAppCode(appCode)){
+		if (useCase.isCorrectAppCode(appCode)) {
 			_state.value = AppCodeViewState()
 			_effects.emit(AppCodeViewEffect.NavigateToPreviousScreen)
 		} else {

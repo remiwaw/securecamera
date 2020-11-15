@@ -13,6 +13,7 @@ import androidx.lifecycle.OnLifecycleEvent
 import com.rwawrzyniak.securephotos.data.ImagesRepository
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.io.File
 import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
@@ -20,6 +21,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 
 // source: https://danielecampogiani.com/blog/2020/08/card-scanner-on-android-using-camerax-and-mlkit/
+@ExperimentalCoroutinesApi
 class UseCameraUseCase @Inject constructor(
 	private val createImageCaptureStorageOptions: CreateImageCaptureStorageOptions,
 	@ActivityContext private val context: Context,
@@ -46,7 +48,7 @@ class UseCameraUseCase @Inject constructor(
 		displayManager.registerDisplayListener(displayListener, null)
 	}
 
-	fun registerLifecycle(lifecycle : Lifecycle){
+	fun registerLifecycle(lifecycle: Lifecycle) {
 		lifecycle.addObserver(this)
 	}
 
@@ -63,7 +65,7 @@ class UseCameraUseCase @Inject constructor(
 	}
 
 
-	fun startCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner){
+	fun startCamera(previewView: PreviewView, lifecycleOwner: LifecycleOwner) {
 		this.previewView = previewView
 		imageCapture = bindUseCases(previewView, lifecycleOwner)
 		displayId = previewView.display.displayId
@@ -73,15 +75,15 @@ class UseCameraUseCase @Inject constructor(
 		previewView: PreviewView,
 		lifecycleOwner: LifecycleOwner
 	): CompletableDeferred<String> {
-		if(!::imageCapture.isInitialized){
+		if (!::imageCapture.isInitialized) {
 			startCamera(previewView, lifecycleOwner)
 		}
 		return requireNotNull(imageCapture).takePicture(cameraExecutor)
 	}
 
 	private fun bindUseCases(
-        previewView: PreviewView,
-        lifecycleOwner: LifecycleOwner
+		previewView: PreviewView,
+		lifecycleOwner: LifecycleOwner
 	): ImageCapture {
 		val preview = buildPreview(previewView.surfaceProvider)
 		val cameraSelector = buildCameraSelector()
@@ -90,8 +92,8 @@ class UseCameraUseCase @Inject constructor(
 		try {
 			cameraProvider.unbindAll()
 			cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)
-		} catch(exc: Exception) {
-            Log.e(TAG, "Use case binding failed", exc)
+		} catch (exc: Exception) {
+			Log.e(TAG, "Use case binding failed", exc)
 		}
 
 		return imageCapture

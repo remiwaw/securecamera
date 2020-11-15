@@ -18,11 +18,14 @@ class CustomFragmentFactory @Inject constructor(
 	private val imagesGridAdapter: ImagesGridAdapter,
 	private val loadStateAdapter: ImagesLoadStateAdapter,
 	private val inputMethodManager: InputMethodManager
-) : FragmentFactory(){
+) : FragmentFactory() {
 	override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
-		return when(className){
+		return when (className) {
 			TakePictureFragment::class.java.name -> TakePictureFragment(useCameraUseCase)
-			PreviewPhotosFragment::class.java.name -> PreviewPhotosFragment(imagesGridAdapter, loadStateAdapter)
+			PreviewPhotosFragment::class.java.name -> PreviewPhotosFragment(
+				imagesGridAdapter,
+				loadStateAdapter
+			)
 			AppCodeFragment::class.java.name -> AppCodeFragment(inputMethodManager)
 			else -> super.instantiate(classLoader, className)
 		}

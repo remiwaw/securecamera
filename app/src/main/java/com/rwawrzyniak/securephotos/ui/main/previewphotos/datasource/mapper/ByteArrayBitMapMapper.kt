@@ -8,19 +8,19 @@ import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class ByteArrayBitMapMapper @Inject constructor(): EntityMapper<ByteArray, Bitmap> {
+class ByteArrayBitMapMapper @Inject constructor() : EntityMapper<ByteArray, Bitmap> {
 
-	override fun mapFromEntity(byteArray: ByteArray): Bitmap {
+	override fun mapFromEntity(entity: ByteArray): Bitmap {
 		return BitmapFactory.decodeByteArray(
-			byteArray,
+			entity,
 			0,
-			byteArray.size
+			entity.size
 		)
 	}
 
-	override fun mapToEntity(bitmap: Bitmap): ByteArray {
+	override fun mapToEntity(domainModel: Bitmap): ByteArray {
 		val stream = ByteArrayOutputStream()
-		bitmap.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_RATIO, stream)
+		domainModel.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_RATIO, stream)
 		return stream.toByteArray()
 	}
 

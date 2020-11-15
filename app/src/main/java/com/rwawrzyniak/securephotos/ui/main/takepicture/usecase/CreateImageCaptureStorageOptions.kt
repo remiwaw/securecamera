@@ -14,11 +14,11 @@ class CreateImageCaptureStorageOptions @Inject constructor
 
 	fun createOutputOptions(): Pair<ImageCapture.OutputFileOptions, File> {
 		val photoFile = File(
-            getOutputDirectory(context),
-            SimpleDateFormat(
-                FILENAME_FORMAT, Locale.US
-            ).format(System.currentTimeMillis()) + ".jpg"
-        )
+			getOutputDirectory(context),
+			SimpleDateFormat(
+				FILENAME_FORMAT, Locale.US
+			).format(System.currentTimeMillis()) + ".jpg"
+		)
 
 		return Pair(ImageCapture.OutputFileOptions.Builder(photoFile).build(), photoFile)
 	}
@@ -31,7 +31,7 @@ class CreateImageCaptureStorageOptions @Inject constructor
 			mediaDir else context.filesDir
 	}
 
-	companion object{
+	companion object {
 		private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
 	}
 }

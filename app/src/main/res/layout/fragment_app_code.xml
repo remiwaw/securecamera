@@ -18,38 +18,37 @@
 		android:id="@+id/appCodeInputLayout"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
+		android:hint="@string/inputPasswordHint"
 		app:boxBackgroundMode="filled"
 		app:errorIconTint="@color/red"
 		app:errorTextColor="@color/red"
-		app:layout_constraintTop_toBottomOf="@id/appCodeTitle"
+		app:layout_constraintBottom_toTopOf="@id/submit"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/submit"
-		android:hint="@string/inputPasswordHint"
+		app:layout_constraintTop_toBottomOf="@id/appCodeTitle"
 		app:passwordToggleEnabled="true">
 
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/appCodeInputText"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/appCodeInputLayout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:hint="@string/passwordHint"
 			android:imeOptions="actionDone"
 			android:inputType="textPassword"
-		 />
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/appCodeInputLayout" />
 
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/submit"
-		android:text="@string/submit"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/appCodeInputLayout"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_width="wrap_content" />
+		android:text="@string/submit"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/appCodeInputLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

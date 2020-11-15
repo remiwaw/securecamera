@@ -6,7 +6,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class ImageMapper @Inject constructor(private val byteArrayBitMapMapper: ByteArrayBitMapMapper):
+class ImageMapper @Inject constructor(private val byteArrayBitMapMapper: ByteArrayBitMapMapper) :
 	EntityMapper<ImageEntity, ImageDto> {
 
 	override fun mapFromEntity(entity: ImageEntity): ImageDto {

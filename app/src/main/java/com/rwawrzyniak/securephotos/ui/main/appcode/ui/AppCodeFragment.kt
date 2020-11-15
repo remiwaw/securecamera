@@ -1,6 +1,5 @@
 package com.rwawrzyniak.securephotos.ui.main.appcode.ui
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -19,7 +18,8 @@ import kotlinx.coroutines.flow.onEach
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class AppCodeFragment(private val inputMethodManager: InputMethodManager) : BasicFragment(R.layout.fragment_app_code) {
+class AppCodeFragment(private val inputMethodManager: InputMethodManager) :
+	BasicFragment(R.layout.fragment_app_code) {
 	private val viewModel: AppCodeViewModelImpl by viewModels()
 
 	override fun onResume() {
@@ -70,7 +70,7 @@ class AppCodeFragment(private val inputMethodManager: InputMethodManager) : Basi
 	}
 
 	private fun handleEffect(effect: AppCodeViewModel.AppCodeViewEffect) {
-		when(effect){
+		when (effect) {
 			AppCodeViewModel.AppCodeViewEffect.NavigateToPreviousScreen -> {
 				hideKeyboard()
 				findNavController().popBackStack()

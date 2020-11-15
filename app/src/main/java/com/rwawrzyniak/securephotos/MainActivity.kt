@@ -60,7 +60,8 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 	}
 
 	private fun getTopFragment(): Fragment? {
-		val navHostFragment = this.supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
+		val navHostFragment =
+			this.supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
 		return navHostFragment?.childFragmentManager?.fragments?.get(0)
 	}
 
@@ -80,7 +81,7 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 	private fun shouldDisplayAppCode(): Boolean {
 		val currentFragment = getTopFragment() as? ShouldSkipAppCodeListener
 		val skipAppCodeForTopFragment = currentFragment?.shouldSkipAppCode() ?: false
-		return 	isOrientationChanged().not() && skipAppCodeForTopFragment.not()
+		return isOrientationChanged().not() && skipAppCodeForTopFragment.not()
 	}
 
 

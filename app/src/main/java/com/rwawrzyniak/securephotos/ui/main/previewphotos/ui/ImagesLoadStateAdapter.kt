@@ -15,7 +15,10 @@ import javax.inject.Inject
 
 class ImagesLoadStateAdapter @Inject constructor() : LoadStateAdapter<LoadingStateViewHolder>() {
 
-	override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadingStateViewHolder {
+	override fun onCreateViewHolder(
+		parent: ViewGroup,
+		loadState: LoadState
+	): LoadingStateViewHolder {
 		val view = LayoutInflater
 			.from(parent.context)
 			.inflate(R.layout.loading_indicator_item, parent, false)
@@ -31,7 +34,8 @@ class ImagesLoadStateAdapter @Inject constructor() : LoadStateAdapter<LoadingSta
 		RecyclerView.ViewHolder(itemView) {
 
 		// For some reason synthetic doesn't work
-		private val textViewErrorMessage: TextView = itemView.findViewById(R.id.textViewErrorMessage)
+		private val textViewErrorMessage: TextView =
+			itemView.findViewById(R.id.textViewErrorMessage)
 		private val progressBar: ProgressBar = itemView.findViewById(R.id.progresBar)
 
 		fun bindState(loadState: LoadState) {
