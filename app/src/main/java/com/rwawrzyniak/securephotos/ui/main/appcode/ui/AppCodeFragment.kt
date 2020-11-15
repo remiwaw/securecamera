@@ -1,7 +1,9 @@
 package com.rwawrzyniak.securephotos.ui.main.appcode.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +16,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class AppCodeFragment : BasicFragment(R.layout.fragment_app_code) {
+class AppCodeFragment(private val inputMethodManager: InputMethodManager) : BasicFragment(R.layout.fragment_app_code) {
 	private val viewModel: AppCodeViewModelImpl by viewModels()
 
 	override fun onResume() {
@@ -40,7 +43,11 @@ class AppCodeFragment : BasicFragment(R.layout.fragment_app_code) {
 
 	private fun setupUI() {
 		submit.setOnClickListener {
-			viewModel.onAction(AppCodeViewModel.AppCodeViewAction.SubmitButtonClicked(appCodeInputText.text.toString()))
+			viewModel.onAction(
+				AppCodeViewModel.AppCodeViewAction.SubmitButtonClicked(
+					appCodeInputText.text.toString()
+				)
+			)
 		}
 	}
 
@@ -64,7 +71,16 @@ class AppCodeFragment : BasicFragment(R.layout.fragment_app_code) {
 
 	private fun handleEffect(effect: AppCodeViewModel.AppCodeViewEffect) {
 		when(effect){
-			AppCodeViewModel.AppCodeViewEffect.NavigateToPreviousScreen -> findNavController().popBackStack()
+			AppCodeViewModel.AppCodeViewEffect.NavigateToPreviousScreen -> {
+				hideKeyboard()
+				findNavController().popBackStack()
+			}
 		}
+	}
+
+	private fun hideKeyboard() {
+		inputMethodManager.hideSoftInputFromWindow(
+			requireActivity().currentFocus?.windowToken, 0
+		)
 	}
 }
