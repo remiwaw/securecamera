@@ -7,7 +7,7 @@
 	<fragment
 		android:id="@+id/mainFragment"
 		android:name="com.rwawrzyniak.securephotos.MainFragment"
-		android:label="fragment_main"
+		android:label="Main screen"
 		tools:layout="@layout/fragment_main" >
 		<action
 			android:id="@+id/action_mainFragment_to_takePictureFragment"
@@ -19,15 +19,15 @@
 	<fragment
 		android:id="@+id/takePictureFragment"
 		android:name="com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureFragment"
-		android:label="TakePictureFragment" />
+		android:label="Take picture" />
 	<fragment
 		android:id="@+id/previewPhotosFragment"
 		android:name="com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosFragment"
-		android:label="PreviewPhotosFragment" />
+		android:label="Photo preview" />
 	<fragment
 		android:id="@+id/appCodeFragment"
 		android:name="com.rwawrzyniak.securephotos.ui.main.appcode.ui.AppCodeFragment"
-		android:label="AppCodeFragment" />
+		android:label="Appcode" />
 	<action
 		android:id="@+id/action_global_appCodeFragment"
 		app:destination="@id/appCodeFragment" />

@@ -29,11 +29,13 @@ import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGridAdapter) : BasicFragment(R.layout.preview_photos_fragment) {
+class PreviewPhotosFragment constructor(
+	private val imagesGridAdapter: ImagesGridAdapter,
+	private val loadStateAdapter: ImagesLoadStateAdapter
+) : BasicFragment(R.layout.preview_photos_fragment) {
 	private val viewModel: PreviewPhotosViewModelImpl by viewModels()
 	private lateinit var permissionFragment: PermissionFragment
 	private var shouldSkipAppCode = false
-	private val imagesLoadStateAdapter by lazy { ImagesLoadStateAdapter() }
 
 	private val loadStateListener = fun(combinedLoadStates: CombinedLoadStates) {
 		when (val state = combinedLoadStates.source.refresh) {
@@ -79,7 +81,7 @@ class PreviewPhotosFragment constructor(private val imagesGridAdapter: ImagesGri
 	private fun setupUI() {
 		with(imagesRV) {
 			layoutManager = GridLayoutManager(context, 2)
-			adapter =  imagesGridAdapter.withLoadStateFooter(imagesLoadStateAdapter)
+			adapter =  imagesGridAdapter.withLoadStateFooter(loadStateAdapter)
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.rwawrzyniak.securephotos.storage
 
+import android.os.Build
 import android.os.Environment
 import com.rwawrzyniak.securephotos.core.android.DataState
 import java.io.File
@@ -55,9 +56,16 @@ class FileImageProvider @Inject constructor(){
 	}
 
 	private fun getDir(): File {
-		// TODO remove deprecation... this may be problematic with target android 10
-		val root = Environment.getExternalStorageDirectory()
+		// In android version Q and higher it wont be possible to save files on external directory...
+		val root = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+			Environment.getDataDirectory()
+		} else {
+			@Suppress("DEPRECATION")
+			Environment.getExternalStorageDirectory()
+		}
+
 		return File("${root.absolutePath}$FOLDER")
+
 	}
 
 	private fun isExternalStorageWritable(): Boolean {

@@ -13,7 +13,7 @@ import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.ImagesLoadStateAdapter.LoadingStateViewHolder
 import javax.inject.Inject
 
-internal class ImagesLoadStateAdapter @Inject constructor() : LoadStateAdapter<LoadingStateViewHolder>() {
+class ImagesLoadStateAdapter @Inject constructor() : LoadStateAdapter<LoadingStateViewHolder>() {
 
 	override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadingStateViewHolder {
 		val view = LayoutInflater

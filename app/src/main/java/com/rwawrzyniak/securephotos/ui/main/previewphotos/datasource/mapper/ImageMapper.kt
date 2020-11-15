@@ -1,7 +1,7 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper
 
 import com.rwawrzyniak.securephotos.core.android.EntityMapper
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImageEntity
+import com.rwawrzyniak.securephotos.data.model.ImageEntity
 import javax.inject.Inject
 
 class ImageMapper @Inject constructor(private val byteArrayBitMapMapper: ByteArrayBitMapMapper):

@@ -1,15 +1,15 @@
-package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource
+package com.rwawrzyniak.securephotos.data
 
 import androidx.paging.PagingSource
 import com.rwawrzyniak.securephotos.core.android.DataState
-import com.rwawrzyniak.securephotos.core.android.DataState.Error
+import com.rwawrzyniak.securephotos.data.model.ImageEntity
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageMapper
 import javax.inject.Inject
 
 class ImagesPagingDataSource @Inject constructor(
     private val imagesRepository: ImagesRepository,
-	private val imageMapper: ImageMapper
+    private val imageMapper: ImageMapper
 ) : PagingSource<Int, ImageDto>() {
 
 	override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ImageDto> {
@@ -21,14 +21,14 @@ class ImagesPagingDataSource @Inject constructor(
 				val imageEntities = dataState.data.map { imageEntity -> imageMapper.mapFromEntity(imageEntity) }
 				mapToLoadResult(imageEntities, params)
 			}
-			is Error -> LoadResult.Error(dataState.exception)
+			is DataState.Error -> LoadResult.Error(dataState.exception)
 			else -> throw IllegalArgumentException("Not supported type")
 		}
 	}
 
     private fun mapToLoadResult(
-		result: List<ImageDto>,
-		loadParams: LoadParams<Int>
+        result: List<ImageDto>,
+        loadParams: LoadParams<Int>
     ): LoadResult<Int, ImageDto> {
         val currentPageNumber = loadParams.key ?: INITIAL_PAGE
         val prevKey = (currentPageNumber - 1).let { if (it < INITIAL_PAGE) null else it }
