@@ -1,3 +1,10 @@
 dependencies {
 	implementation project(':core-android')
+
+	// TODO move to core-test module
+	testImplementation libraries.tests.mockitoKotlin
+	testImplementation libraries.tests.junit
+	testImplementation libraries.tests.roboelectric
+	testImplementation libraries.tests.androidx.core
+	testImplementation libraries.tests.assertk
 }

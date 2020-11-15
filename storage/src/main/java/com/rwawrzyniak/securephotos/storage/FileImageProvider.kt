@@ -1,6 +1,7 @@
 package com.rwawrzyniak.securephotos.storage
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import com.rwawrzyniak.securephotos.core.android.DataState
 import java.io.File
 import java.io.FileOutputStream
@@ -16,7 +17,7 @@ class FileImageProvider @Inject constructor(private val context: Context){
 				return DataState.Success(listOf())
 			}
 
-			val allFiles = dir.listFiles().filter { it.isFile && it.name.contains(withPrefix) }
+			val allFiles = dir.listFiles().sortedByDescending { it.lastModified() }.filter { it.isFile && it.name.contains(withPrefix) }
 			val startIndex = if(pageNumber == 1) {
 				0
 			} else {
@@ -31,7 +32,16 @@ class FileImageProvider @Inject constructor(private val context: Context){
 		}
 	}
 
-	fun save(fileName: String, byteArray: ByteArray): DataState<Unit> = try {
+	// Not used yet, but it could be used to read encrypted image in full resolution.
+	fun read(fileName: String): DataState<File> = try {
+		val dir = getDir()
+		val file = dir.listFiles().first { it.isFile && it.name == fileName }
+		DataState.Success(file)
+	} catch (e: Exception){
+		DataState.Error(e)
+	}
+
+	fun save(fileName: String, byteArray: ByteArray): DataState<File> = try {
 		val dir = getDir()
 		dir.mkdirs()
 
@@ -41,7 +51,7 @@ class FileImageProvider @Inject constructor(private val context: Context){
 		val fos = FileOutputStream(file)
 		fos.write(byteArray)
 		fos.close()
-        DataState.Success(Unit)
+        DataState.Success(file)
 	} catch (e: Exception){
         DataState.Error(e)
 	}
@@ -58,6 +68,6 @@ class FileImageProvider @Inject constructor(private val context: Context){
 	}
 
 	companion object {
-		private const val FOLDER = "/encryptedPictures"
+		@VisibleForTesting const val FOLDER = "/encryptedPictures"
 	}
 }

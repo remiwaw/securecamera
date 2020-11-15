@@ -32,8 +32,6 @@ dependencies {
 
 	implementation libraries.androidx.core
 	implementation libraries.androidx.constraintLayout
-	implementation libraries.androidx.testExt
-	implementation libraries.androidx.espresso
 	implementation libraries.androidx.fragment
 	implementation libraries.androidx.fragmentKtx
 	implementation libraries.androidx.fragmentTesting
