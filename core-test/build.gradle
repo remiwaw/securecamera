@@ -1,0 +1,7 @@
+dependencies {
+	api libraries.tests.mockitoKotlin
+	api libraries.tests.junit
+	api libraries.tests.roboelectric
+	api libraries.tests.androidx.core
+	api libraries.tests.assertk
+}

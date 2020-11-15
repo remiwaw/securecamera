@@ -1,3 +1,4 @@
+include ':core-test'
 include ':app'
 include ':storage'
 include ':core-android'
