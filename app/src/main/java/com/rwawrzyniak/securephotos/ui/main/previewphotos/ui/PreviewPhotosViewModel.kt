@@ -90,7 +90,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	}
 
 	private fun prepareLisLoadingCompleteState(itemCount: Int): PreviewPhotosViewState =
-		PreviewPhotosViewState(noPhotosAvailable = false, loadedImagesCount = itemCount)
+		_state.value.copy(noPhotosAvailable = false, loadedImagesCount = itemCount)
 
 	private fun onInitialize() = updatePageList(wirePagedList())
 
