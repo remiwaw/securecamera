@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDao
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesRepository
 import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.CompletableDeferred

@@ -1,16 +1,13 @@
-package com.rwawrzyniak.securephotos.ui.main.appcode
+package com.rwawrzyniak.securephotos.ui.main.appcode.ui
 
-import android.content.Context
 import android.content.res.Resources
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rwawrzyniak.securephotos.R
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosViewModel
-import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel
+import com.rwawrzyniak.securephotos.ui.main.appcode.usecase.AppCodeCheckUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

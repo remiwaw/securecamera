@@ -1,6 +1,8 @@
-package com.rwawrzyniak.securephotos.ui.main.encryption
+package com.rwawrzyniak.securephotos.encryption
 
 import androidx.annotation.VisibleForTesting
+import com.rwawrzyniak.securephotos.encryption.CryptoParameters.CIPHER_TRANSFORMATION
+import com.rwawrzyniak.securephotos.encryption.CryptoParameters.IV_SIZE
 import java.security.Key
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -24,10 +26,5 @@ class AESInitializer @Inject @VisibleForTesting internal constructor(){
 
     private fun randomIV(): ByteArray = ByteArray(IV_SIZE).also { random.nextBytes(it) }
 
-    private fun createCipher(): Cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
-
-    companion object {
-        // AES block size is 16 byte, so our IV must be of the same size
-        const val IV_SIZE = 16
-    }
+    private fun createCipher(): Cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
 }

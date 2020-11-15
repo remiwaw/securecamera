@@ -1,5 +1,10 @@
-package com.rwawrzyniak.securephotos.ui.main.encryption
+package com.rwawrzyniak.securephotos.encryption
 
+import com.rwawrzyniak.securephotos.encryption.CryptoParameters.ENCRYPTION_ALGORITHM_AES
+import com.rwawrzyniak.securephotos.encryption.CryptoParameters.SALT_SIZE
+import com.rwawrzyniak.securephotos.encryption.CryptoParameters.SECRET_KEY_ALGORITHM
+import com.rwawrzyniak.securephotos.encryption.CryptoParameters.iterationCount
+import com.rwawrzyniak.securephotos.encryption.CryptoParameters.keyStrength
 import java.security.SecureRandom
 import java.security.spec.KeySpec
 import javax.crypto.SecretKey
@@ -19,13 +24,9 @@ class SecretKeyGenerator @Inject constructor()  {
 		val factory: SecretKeyFactory = SecretKeyFactory.getInstance(SECRET_KEY_ALGORITHM)
 		val spec: KeySpec = PBEKeySpec(password.toCharArray(), salt, iterationCount, keyStrength)
 		val tmp: SecretKey = factory.generateSecret(spec)
-		return SecretKeySpec(tmp.encoded, "AES")
+		return SecretKeySpec(tmp.encoded, ENCRYPTION_ALGORITHM_AES)
 	}
 
 	companion object{
-		private const val SECRET_KEY_ALGORITHM = "PBKDF2WithHmacSHA1"
-		private const val SALT_SIZE = 32
-		private const val iterationCount = 1024
-		private const val keyStrength = 256
 	}
 }

@@ -1,4 +1,4 @@
 include ':app'
 include ':storage'
-include ':core'
 include ':core-android'
+include ':encryption'

@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.rwawrzyniak.securephotos.ext
+package com.rwawrzyniak.securephotos.core.android.ext
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

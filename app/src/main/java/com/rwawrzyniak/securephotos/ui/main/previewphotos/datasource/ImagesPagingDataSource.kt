@@ -2,10 +2,9 @@ package com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource
 
 import androidx.paging.PagingSource
 import com.rwawrzyniak.securephotos.core.android.DataState
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
 import com.rwawrzyniak.securephotos.core.android.DataState.Error
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageMapper
-import java.io.File
 import javax.inject.Inject
 
 class ImagesPagingDataSource @Inject constructor(

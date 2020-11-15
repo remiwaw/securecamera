@@ -26,7 +26,7 @@
 		android:label="PreviewPhotosFragment" />
 	<fragment
 		android:id="@+id/appCodeFragment"
-		android:name="com.rwawrzyniak.securephotos.ui.main.appcode.AppCodeFragment"
+		android:name="com.rwawrzyniak.securephotos.ui.main.appcode.ui.AppCodeFragment"
 		android:label="AppCodeFragment" />
 	<action
 		android:id="@+id/action_global_appCodeFragment"

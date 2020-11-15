@@ -4,8 +4,8 @@ import com.rwawrzyniak.securephotos.core.android.Constants.THUMBNAIL
 import com.rwawrzyniak.securephotos.core.android.Constants.THUMBNAIL_WIDTH_HEIGHT
 import com.rwawrzyniak.securephotos.core.android.DataState
 import com.rwawrzyniak.securephotos.core.android.ResizeBitmapUseCase
-import com.rwawrzyniak.securephotos.ext.toByteArray
-import com.rwawrzyniak.securephotos.ui.main.encryption.usecase.EncryptDecryptDataUseCase
+import com.rwawrzyniak.securephotos.core.android.ext.toByteArray
+import com.rwawrzyniak.securephotos.encryption.usecase.EncryptDecryptDataUseCase
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ByteArrayBitMapMapper
 import java.io.File
 import javax.inject.Inject

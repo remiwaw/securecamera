@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main.encryption
+package com.rwawrzyniak.securephotos.encryption
 
 import javax.crypto.Cipher
 

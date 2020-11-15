@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.rwawrzyniak.securephotos.R
-import com.rwawrzyniak.securephotos.ext.getOrAddFragment
+import com.rwawrzyniak.securephotos.core.android.ext.getOrAddFragment
 import kotlinx.coroutines.CompletableDeferred
 
 // source: https://geoffreymetais.github.io/code/runtime-permissions/#deferred-behavior

@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ui.main.appcode
+package com.rwawrzyniak.securephotos.ui.main.appcode.ui
 
 import android.os.Bundle
 import android.view.View
@@ -8,8 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.core.android.BasicFragment
-import com.rwawrzyniak.securephotos.core.android.OnBackPressedListener
-import com.rwawrzyniak.securephotos.ui.main.appcode.AppCodeViewModel.AppCodeViewAction.SubmitButtonClicked
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_app_code.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +40,7 @@ class AppCodeFragment : BasicFragment(R.layout.fragment_app_code) {
 
 	private fun setupUI() {
 		submit.setOnClickListener {
-			viewModel.onAction(SubmitButtonClicked(inputText.text.toString()))
+			viewModel.onAction(AppCodeViewModel.AppCodeViewAction.SubmitButtonClicked(appCodeInputText.text.toString()))
 		}
 	}
 

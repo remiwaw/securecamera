@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ext
+package com.rwawrzyniak.securephotos.core.android.ext
 
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction

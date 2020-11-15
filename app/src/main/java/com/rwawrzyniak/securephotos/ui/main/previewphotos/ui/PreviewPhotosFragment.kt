@@ -23,7 +23,8 @@ import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosViewMo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.preview_photos_fragment.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi

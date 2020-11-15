@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.camera.core.ImageCapture
 import com.rwawrzyniak.securephotos.R
 import dagger.hilt.android.qualifiers.ActivityContext
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*

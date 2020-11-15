@@ -3,11 +3,6 @@ package com.rwawrzyniak.securephotos.di
 import android.content.Context
 import android.hardware.display.DisplayManager
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.lifecycle.LifecycleOwner
-import com.google.common.util.concurrent.ListenableFuture
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.ImagesDao
-import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.CreateImageCaptureStorageOptions
-import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.StartCameraUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

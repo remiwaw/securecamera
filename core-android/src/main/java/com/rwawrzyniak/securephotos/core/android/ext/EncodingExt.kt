@@ -1,4 +1,4 @@
-package com.rwawrzyniak.securephotos.ext
+package com.rwawrzyniak.securephotos.core.android.ext
 
 import android.util.Base64
 
