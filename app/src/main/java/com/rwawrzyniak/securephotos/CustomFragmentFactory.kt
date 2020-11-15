@@ -9,8 +9,10 @@ import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.ImagesLoadStateAdap
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosFragment
 import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureFragment
 import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.UseCameraUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class CustomFragmentFactory @Inject constructor(
 	private val useCameraUseCase: UseCameraUseCase,
 	private val imagesGridAdapter: ImagesGridAdapter,

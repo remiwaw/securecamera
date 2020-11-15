@@ -9,9 +9,11 @@ import com.rwawrzyniak.securephotos.data.DataConstants.THUMBNAIL_WIDTH_HEIGHT
 import com.rwawrzyniak.securephotos.data.model.ImageEntity
 import com.rwawrzyniak.securephotos.encryption.usecase.EncryptDecryptDataUseCase
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ByteArrayBitMapMapper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.io.File
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class  ImagesRepository @Inject constructor(
 	private val imagesFileSystemDao: ImagesFileSystemDao,
 	private val encryptDecryptDataUseCase: EncryptDecryptDataUseCase,

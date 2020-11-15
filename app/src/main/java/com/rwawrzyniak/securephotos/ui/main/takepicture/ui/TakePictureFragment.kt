@@ -1,7 +1,6 @@
 package com.rwawrzyniak.securephotos.ui.main.takepicture.ui
 
 import android.Manifest
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
@@ -92,7 +91,7 @@ class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseC
 
 	private suspend fun handleEffectChange(effect: TakePictureViewModel.TakePictureViewEffect) {
 		if(!permissionFragment.checkPermission()){
-			showPermissionPermanentlyDeniedPopup(requireContext())
+			showPermissionPermanentlyDeniedPopup()
 			findNavController().popBackStack()
 		}
 
@@ -109,7 +108,7 @@ class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseC
 		}
 	}
 
-	private fun showPermissionPermanentlyDeniedPopup(context: Context) {
+	private fun showPermissionPermanentlyDeniedPopup() {
 		Toast.makeText(
 			requireContext(),
 			requireContext().getString(R.string.storage_and_camera_permission_denied_permanently),

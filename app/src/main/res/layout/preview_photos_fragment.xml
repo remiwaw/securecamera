@@ -6,26 +6,42 @@
 	xmlns:tools="http://schemas.android.com/tools">
 
 	<TextView
+		android:id="@+id/imagesCount"
+		android:padding="16dp"
+		android:textSize="16sp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/no_data_available"
+		android:visibility="visible"
+		app:layout_constraintBottom_toTopOf="@+id/imagesRV"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="Images loaded: 1" />
+
+	<TextView
 		android:id="@+id/empty_view"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:gravity="center"
-		android:visibility="visible"
 		android:text="@string/no_data_available"
-		tools:text="No data available"/>
+		android:visibility="visible"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="No data available" />
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/imagesRV"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:padding="16dp"
-
 		app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/imagesCount"
 		app:spanCount="2"
 		tools:listitem="@layout/image_item_in_grid_layout"
 		/>

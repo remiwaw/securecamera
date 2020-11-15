@@ -17,4 +17,5 @@
 	<string name="inputPasswordHint">Provide your password</string>
 	<string name="incorrectPasswordMessage">Incorrect app code</string>
 	<string name="desc_img">Loading</string>
+    <string name="item_count_header">%d images loaded</string>
 </resources>

@@ -8,7 +8,7 @@ import com.rwawrzyniak.securephotos.encryption.Mode
 import java.io.File
 import javax.inject.Inject
 
-class EncryptDecryptDataUseCase @VisibleForTesting @Inject internal constructor(
+class EncryptDecryptDataUseCase @Inject constructor(
 	private val findOrCreateKeyUseCase: FindOrCreateKeyUseCase,
 	private val aesInitializer: AESInitializer
 )  {

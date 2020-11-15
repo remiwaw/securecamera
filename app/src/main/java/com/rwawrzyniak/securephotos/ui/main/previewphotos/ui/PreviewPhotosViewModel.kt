@@ -28,7 +28,7 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 	internal data class PreviewPhotosViewState(
 		val pagingDataFlow: Flow<PagingData<ImageDto>>? = null,
 		val noPhotosAvailable: Boolean = true,
-		val loadedImagesCount: Int = 0
+		val loadedImagesCountText: String = ""
 	)
 
 	internal sealed class PreviewPhotosViewEffect{
@@ -90,7 +90,10 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 	}
 
 	private fun prepareLisLoadingCompleteState(itemCount: Int): PreviewPhotosViewState =
-		_state.value.copy(noPhotosAvailable = false, loadedImagesCount = itemCount)
+		_state.value.copy(
+			noPhotosAvailable = false,
+			loadedImagesCountText = resources.getString(R.string.item_count_header, itemCount)
+		)
 
 	private fun onInitialize() = updatePageList(wirePagedList())
 

@@ -73,7 +73,6 @@ class PreviewPhotosFragment constructor(
 	override fun onPause() {
 		with(imagesGridAdapter) {
 			removeLoadStateListener(loadStateListener)
-
 		}
 		super.onPause()
 	}
@@ -102,6 +101,8 @@ class PreviewPhotosFragment constructor(
 			showPermissionPermanentlyDeniedPopup(requireContext())
 			findNavController().popBackStack()
 		}
+
+		imagesCount.setText(state.loadedImagesCountText)
 
 		if(state.noPhotosAvailable){
 			empty_view.visibility = View.VISIBLE

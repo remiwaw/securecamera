@@ -73,11 +73,11 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
 	private fun navigateToAppCodeScreenIfNotAlreadyDisplayed(navController: NavController) {
 		// TODO avoid hardcoded label for fragment
-		if (shouldDisplayAppCode(navController))
+		if (shouldDisplayAppCode())
 			navController.navigate(R.id.action_global_appCodeFragment)
 	}
 
-	private fun shouldDisplayAppCode(navController: NavController) : Boolean {
+	private fun shouldDisplayAppCode(): Boolean {
 		val currentFragment = getTopFragment() as? ShouldSkipAppCodeListener
 		val skipAppCodeForTopFragment = currentFragment?.shouldSkipAppCode() ?: false
 		return 	isOrientationChanged().not() && skipAppCodeForTopFragment.not()
