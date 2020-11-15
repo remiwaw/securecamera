@@ -5,13 +5,13 @@ import androidx.fragment.app.FragmentFactory
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.ImagesGridAdapter
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosFragment
 import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureFragment
-import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.StartCameraUseCase
+import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.UseCameraUseCase
 import javax.inject.Inject
 
-class CustomFragmentFactory @Inject constructor(private val startCameraUseCase: StartCameraUseCase, private val imagesGridAdapter: ImagesGridAdapter) : FragmentFactory(){
+class CustomFragmentFactory @Inject constructor(private val useCameraUseCase: UseCameraUseCase, private val imagesGridAdapter: ImagesGridAdapter) : FragmentFactory(){
 	override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
 		return when(className){
-			TakePictureFragment::class.java.name -> TakePictureFragment(startCameraUseCase)
+			TakePictureFragment::class.java.name -> TakePictureFragment(useCameraUseCase)
 			PreviewPhotosFragment::class.java.name -> PreviewPhotosFragment(imagesGridAdapter)
 			else -> super.instantiate(classLoader, className)
 		}

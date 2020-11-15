@@ -20,7 +20,7 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 
 // source: https://danielecampogiani.com/blog/2020/08/card-scanner-on-android-using-camerax-and-mlkit/
-class StartCameraUseCase @Inject constructor(
+class UseCameraUseCase @Inject constructor(
 	private val createImageCaptureStorageOptions: CreateImageCaptureStorageOptions,
 	@ActivityContext private val context: Context,
 	private val imagesRepository: ImagesRepository,
@@ -36,7 +36,7 @@ class StartCameraUseCase @Inject constructor(
 		override fun onDisplayAdded(displayId: Int) = Unit
 		override fun onDisplayRemoved(displayId: Int) = Unit
 		override fun onDisplayChanged(displayId: Int) = previewView?.let { view ->
-			if (displayId == this@StartCameraUseCase.displayId) {
+			if (displayId == this@UseCameraUseCase.displayId) {
 				imageCapture.targetRotation = view.display.rotation
 			}
 		} ?: Unit

@@ -17,20 +17,20 @@ import com.rwawrzyniak.securephotos.core.android.BasicFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.permissions.PermissionFragment.Companion.createAndCommitPermissionFragment
 import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel.TakePhotosViewAction.TakePictureButtonClicked
-import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.StartCameraUseCase
+import com.rwawrzyniak.securephotos.ui.main.takepicture.usecase.UseCameraUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.camera_ui_container.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TakePictureFragment @Inject constructor(private val startCameraUseCase: StartCameraUseCase) : BasicFragment(R.layout.take_picture_fragment) {
+class TakePictureFragment @Inject constructor(private val useCameraUseCase: UseCameraUseCase) : BasicFragment(R.layout.take_picture_fragment) {
 
 	private lateinit var container: ConstraintLayout
-	private lateinit var viewFinder: PreviewView
+	private lateinit var previewView: PreviewView
 
 	private val viewModel: TakePictureViewModelImpl by viewModels()
 	private lateinit var permissionFragment: PermissionFragment
@@ -40,7 +40,7 @@ class TakePictureFragment @Inject constructor(private val startCameraUseCase: St
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		container = view as ConstraintLayout
-		viewFinder = container.findViewById(R.id.viewFinder)
+		previewView = container.findViewById(R.id.viewFinder)
 
 		permissionFragment = createAndCommitPermissionFragment(CAMERA_PERMISSION_FRAGMENT_TAG, REQUIRED_PERMISSIONS)
 		shouldSkipAppCode = permissionFragment.shouldSkipAppCode()
@@ -64,7 +64,7 @@ class TakePictureFragment @Inject constructor(private val startCameraUseCase: St
 	}
 
 	private fun setupUI() {
-		viewFinder.post {
+		previewView.post {
 			updateCameraUi()
 		}
 	}
@@ -82,9 +82,10 @@ class TakePictureFragment @Inject constructor(private val startCameraUseCase: St
 	}
 
 	private fun wireUpViewModel() {
-		viewModel.observeEffect()
-			.onEach { effect -> handleEffectChange(effect) }
-			.launchIn(lifecycleScope)
+		lifecycleScope.launch {
+			viewModel.observeEffect()
+				.collectLatest { effect -> handleEffectChange(effect) }
+		}
 
 		viewModel.onAction(TakePictureViewModel.TakePhotosViewAction.Initialize)
 	}
@@ -97,13 +98,13 @@ class TakePictureFragment @Inject constructor(private val startCameraUseCase: St
 
 		when(effect){
 			TakePictureViewModel.TakePictureViewEffect.TakePicture -> {
-				val result = startCameraUseCase.takePicture(viewFinder, this).await()
+				val result = useCameraUseCase.takePicture(previewView, this).await()
 				showResultToast(result)
 			}
 
 			TakePictureViewModel.TakePictureViewEffect.StartCameraPreview -> {
-				startCameraUseCase.registerLifecycle(lifecycle)
-				startCameraUseCase.startCamera(viewFinder, this)
+				useCameraUseCase.registerLifecycle(lifecycle)
+				useCameraUseCase.startCamera(previewView, this)
 			}
 		}
 	}
@@ -130,6 +131,5 @@ class TakePictureFragment @Inject constructor(private val startCameraUseCase: St
 			Manifest.permission.CAMERA,
 			Manifest.permission.WRITE_EXTERNAL_STORAGE
 		)
-
 	}
 }
