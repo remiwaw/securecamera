@@ -1,0 +1,4 @@
+include ':app'
+include ':storage'
+include ':core-android'
+include ':encryption'

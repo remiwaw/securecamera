@@ -1,0 +1,31 @@
+dependencies {
+	api libraries.coroutinesCore
+	api libraries.coroutinesAndroid
+
+	api libraries.androidx.paging
+
+	api libraries.androidx.core
+	api libraries.androidx.appcompat
+	api libraries.androidx.constraintLayout
+	api libraries.androidx.lifecycle
+	api libraries.androidx.viewmodel
+	api libraries.androidx.legacy
+	api libraries.androidx.testExt
+	api libraries.androidx.espresso
+	api libraries.androidx.fragment
+	api libraries.androidx.fragmentKtx
+	api libraries.androidx.fragmentTesting
+	api libraries.androidx.camera2
+	api libraries.androidx.cameraLifeCycle
+	api libraries.androidx.cameraView
+	api libraries.androidx.cameraExt
+	api libraries.androidx.navigationFragment
+	api libraries.androidx.navigationUI
+	api libraries.androidx.securityCrypto
+	api libraries.androidx.materialComponents
+
+	api libraries.coil
+
+	androidTestImplementation libraries.androidx.navigationTesting
+
+}

@@ -1,0 +1,20 @@
+<resources>
+	<string name="app_name">SecurePhotos</string>
+	<string name="camera_permission_denied_permanently">"Camera permission denied permanently! Change it in settings"</string>
+	<string name="error_loading_images">Error loading images</string>
+
+	<string name="rationale_title">Permision needed!</string>
+	<string name="rationale_description">To use this function you have to grant following access: </string>
+	<string name="no_data_available">No data available</string>
+	<string name="take_photo">Take Photo</string>
+	<string name="open_camera">Open camera</string>
+	<string name="view_photos">View photos</string>
+	<string name="capture_button_alt">TakePicture</string>
+	<string name="submit">submit</string>
+	<string name="passwordHint">Your password here</string>
+	<string name="provideAppCodeTitle">App locked</string>
+	<string name="inputPasswordHint">Provide your password</string>
+	<string name="incorrectPasswordMessage">Incorrect app code</string>
+	<string name="desc_img">Loading</string>
+	<string name="item_count_header">%d images loaded</string>
+</resources>

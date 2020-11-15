@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/nav_graph"
+	app:startDestination="@id/mainFragment">
+	<fragment
+		android:id="@+id/mainFragment"
+		android:name="com.rwawrzyniak.securephotos.MainFragment"
+		android:label="Main screen"
+		tools:layout="@layout/fragment_main">
+		<action
+			android:id="@+id/action_mainFragment_to_takePictureFragment"
+			app:destination="@id/takePictureFragment" />
+		<action
+			android:id="@+id/action_mainFragment_to_previewPhotosFragment"
+			app:destination="@id/previewPhotosFragment" />
+	</fragment>
+	<fragment
+		android:id="@+id/takePictureFragment"
+		android:name="com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureFragment"
+		android:label="Take picture" />
+	<fragment
+		android:id="@+id/previewPhotosFragment"
+		android:name="com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosFragment"
+		android:label="Photo preview" />
+	<fragment
+		android:id="@+id/appCodeFragment"
+		android:name="com.rwawrzyniak.securephotos.ui.main.appcode.ui.AppCodeFragment"
+		android:label="Appcode" />
+	<action
+		android:id="@+id/action_global_appCodeFragment"
+		app:destination="@id/appCodeFragment" />
+</navigation>
