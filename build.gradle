@@ -20,6 +20,7 @@ buildscript {
 		javax_inject_version = '1'
 		junit_ext_version = '1.1.2'
 		espresso_core_version = '3.3.0'
+		mockito_kotlin_version = '2.2.0'
 	}
 
 

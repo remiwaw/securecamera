@@ -3,4 +3,5 @@ dependencies {
 	api libraries.androidx.appcompat
 	api libraries.androidx.fragment
 	api libraries.androidx.securityCrypto
+	testImplementation libraries.mockitoKotlin
 }

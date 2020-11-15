@@ -45,6 +45,6 @@ ext.libraries = [
 		kotlin           : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 		coroutinesCore   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
 		coroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version",
-
+		mockitoKotlin: "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version",
 		coil: "io.coil-kt:coil:$coil_version"
 ]
