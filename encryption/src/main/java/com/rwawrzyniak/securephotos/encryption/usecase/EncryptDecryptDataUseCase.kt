@@ -25,14 +25,14 @@ class EncryptDecryptDataUseCase @Inject constructor(
 		return encryptedByteArray
 	}
 
-	fun decrypt(file: File): ByteArray {
-		val encryptedContents = file.toByteArray()
+	fun decrypt(file: File): ByteArray = decrypt(file.toByteArray())
+
+	fun decrypt(encryptedContents: ByteArray): ByteArray {
 		val iv = encryptedContents.copyOf(IV_SIZE)
 		val payload = encryptedContents.copyOfRange(IV_SIZE, encryptedContents.size)
 		val cipher = aesInitializer.initialize(Mode.DECRYPT, findOrCreateKey(), iv)
 		return cipher.doFinal(payload)
 	}
 
-	private fun findOrCreateKey() =
-		findOrCreateKeyUseCase.findOrCreateKey()
+	private fun findOrCreateKey() = findOrCreateKeyUseCase.findOrCreateKey()
 }

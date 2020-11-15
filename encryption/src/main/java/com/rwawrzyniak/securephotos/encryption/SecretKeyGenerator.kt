@@ -26,7 +26,4 @@ class SecretKeyGenerator @Inject constructor()  {
 		val tmp: SecretKey = factory.generateSecret(spec)
 		return SecretKeySpec(tmp.encoded, ENCRYPTION_ALGORITHM_AES)
 	}
-
-	companion object{
-	}
 }

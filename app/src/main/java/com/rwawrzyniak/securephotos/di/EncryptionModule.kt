@@ -23,10 +23,9 @@ object EncryptionModule {
 		encryptedSharedPreferences: EncryptedSharedPreferences
 	): FindOrCreateKeyUseCase {
 		return FindOrCreateKeyUseCase(
-			context,
-			secretKeyGenerator,
-			encryptedSharedPreferences
-		)
+            secretKeyGenerator,
+            encryptedSharedPreferences
+        )
 	}
 
 	@Singleton

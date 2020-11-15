@@ -1,7 +1,12 @@
 dependencies {
+	api project(':core')
+
 	api libraries.tests.mockitoKotlin
 	api libraries.tests.junit
-	api libraries.tests.roboelectric
 	api libraries.tests.androidx.core
 	api libraries.tests.assertk
+	api libraries.tests.mockitoInline
+
+	// TODO create Android test module for instumentatin tests
+	api libraries.tests.androidx.runner
 }

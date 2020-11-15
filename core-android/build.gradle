@@ -1,7 +1,8 @@
 dependencies {
+	api project(':core')
 	api libraries.javaxInject
 	api libraries.androidx.appcompat
 	api libraries.androidx.fragment
 	api libraries.androidx.securityCrypto
-	api project(':core-test')
+	api libraries.androidx.constraintLayout
 }

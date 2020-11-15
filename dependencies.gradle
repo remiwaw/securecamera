@@ -4,7 +4,8 @@ ext.buildLibraries = [
 		gradleTools     : "com.android.tools.build:gradle:$gradle_tools_version",
 		gradlePlugin    : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version",
 		navSafeArgs     : "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version",
-		hiltGradlePlugin: "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+		hiltGradlePlugin: "com.google.dagger:hilt-android-gradle-plugin:$hilt_version",
+		kotlinAllOpen : "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
 ]
 
 ext.libraries = [
@@ -48,6 +49,7 @@ ext.libraries = [
 				roboelectric: "org.robolectric:robolectric:$robolectric_version",
 				junit            : "junit:junit:$junit_version",
 				mockitoKotlin: "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version",
+				mockitoInline   : "org.mockito:mockito-inline:$mockito_version",
 				assertk         : "com.willowtreeapps.assertk:assertk-jvm:$assertk_version",
 
 				androidx : [

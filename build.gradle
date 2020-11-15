@@ -24,6 +24,7 @@ buildscript {
 		robolectric_version = '4.3.1'
 		androidx_tests_version = '1.3.0'
 		assertk_version = '0.23'
+		mockito_version = '3.5.13'
 	}
 
 
@@ -38,6 +39,7 @@ buildscript {
     dependencies {
 		classpath buildLibraries.gradleTools
 		classpath buildLibraries.gradlePlugin
+		classpath buildLibraries.kotlinAllOpen
 		classpath buildLibraries.navSafeArgs
 		classpath buildLibraries.hiltGradlePlugin
 	}
@@ -46,12 +48,17 @@ buildscript {
 subprojects { project ->
 	def isAndroidModule = project.file('src/main/AndroidManifest.xml').exists()
 
+	/*
+		In case there are pure java modules (with no android libraries)
+	*/
 	if (isAndroidModule)
 		apply from: rootProject.file('moduleAndroid.gradle')
 	else
 		apply from: rootProject.file('moduleJava.gradle')
 
+
 	apply plugin: 'kotlin-kapt'
+	apply plugin: 'kotlin-allopen'
 
 	apply from: rootProject.file('dependencies.gradle')
 

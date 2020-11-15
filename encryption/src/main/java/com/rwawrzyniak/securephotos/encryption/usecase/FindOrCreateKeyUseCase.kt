@@ -1,6 +1,5 @@
 package com.rwawrzyniak.securephotos.encryption.usecase
 
-import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import com.rwawrzyniak.securephotos.core.android.Constants
 import com.rwawrzyniak.securephotos.core.android.ext.fromBase64
@@ -12,9 +11,8 @@ import javax.crypto.spec.SecretKeySpec
 import javax.inject.Inject
 
 class FindOrCreateKeyUseCase @Inject constructor(
-    private val context: Context,
-    private val secretKeyGenerator: SecretKeyGenerator,
-    private val sharedPreferences: EncryptedSharedPreferences
+	private val secretKeyGenerator: SecretKeyGenerator,
+	private val sharedPreferences: EncryptedSharedPreferences
 ) {
 
     fun findOrCreateKey(): SecretKey =

@@ -1,3 +1,7 @@
 dependencies {
 	implementation project(':core-android')
+	testImplementation project(':core-test')
+
+	// TODO make module with robolectric tests
+	api libraries.tests.roboelectric
 }
