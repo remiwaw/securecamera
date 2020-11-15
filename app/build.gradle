@@ -16,14 +16,41 @@ android {
 }
 
 dependencies {
+	// Hilt dependencies
 	implementation libraries.hilt.android
-	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-	implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-	implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 	kapt libraries.hilt.kapt
+
+	implementation libraries.androidx.lifecycle
+	implementation libraries.androidx.viewmodel
 	implementation libraries.hilt.viewmodel
 	kapt libraries.hilt.kaptX
 	testImplementation libraries.hilt.androidTesting
+
+	// app dependencies
+	implementation libraries.coroutinesCore
+	implementation libraries.coroutinesAndroid
+
+	implementation libraries.androidx.core
+	implementation libraries.androidx.constraintLayout
+	implementation libraries.androidx.testExt
+	implementation libraries.androidx.espresso
+	implementation libraries.androidx.fragment
+	implementation libraries.androidx.fragmentKtx
+	implementation libraries.androidx.fragmentTesting
+	implementation libraries.androidx.camera2
+	implementation libraries.androidx.cameraLifeCycle
+	implementation libraries.androidx.cameraView
+	implementation libraries.androidx.cameraExt
+	implementation libraries.androidx.navigationFragment
+	implementation libraries.androidx.navigationUI
+	implementation libraries.androidx.materialComponents
+
+	implementation libraries.coil
+
+	implementation libraries.androidx.paging
+
+
+	androidTestImplementation libraries.androidx.navigationTesting
 
 	// Modules
 	implementation project(':core-android')
