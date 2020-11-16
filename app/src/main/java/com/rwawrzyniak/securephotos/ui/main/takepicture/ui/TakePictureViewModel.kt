@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel.TakePictureViewEffect.StartCameraPreview
 import com.rwawrzyniak.securephotos.ui.main.takepicture.ui.TakePictureViewModel.TakePictureViewEffect.TakePicture
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -32,8 +33,10 @@ internal class TakePictureViewModelImpl @ViewModelInject constructor() : TakePic
 
 	override fun observeEffect(): SharedFlow<TakePictureViewEffect> = _effects
 
+	// this run on Main, because in the case of configuration change (i.e orientation change)
+	// previewView passed to UseCameraUseCase become null. And we need to wait for its creaton (so on Main thread)
 	override fun onAction(action: TakePhotosViewAction) {
-		viewModelScope.launch {
+		viewModelScope.launch(Dispatchers.Main) {
 			_actionChannel.emit(action)
 		}
 	}
