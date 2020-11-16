@@ -11,7 +11,7 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.core.android.BasicFragment
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageModel
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosViewModel.PreviewPhotosViewAction.OnLoadingFailed
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosViewModel.PreviewPhotosViewAction.OnLoadingFinished
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.ui.PreviewPhotosViewModel.PreviewPhotosViewEffect
@@ -110,7 +110,7 @@ class PreviewPhotosFragment constructor(
 		)
 	}
 
-	private suspend fun showImages(pagingDataFlow: Flow<PagingData<ImageDto>>) {
+	private suspend fun showImages(pagingDataFlow: Flow<PagingData<ImageModel>>) {
 		pagingDataFlow
 			.collectLatest { pagingData ->
 				imagesGridAdapter.submitData(

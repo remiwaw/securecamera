@@ -1,6 +1,5 @@
 package com.rwawrzyniak.securephotos.ui.main.takepicture.usecase
 
-import android.content.Context
 import android.hardware.display.DisplayManager
 import android.util.Log
 import androidx.camera.core.*
@@ -11,7 +10,6 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.rwawrzyniak.securephotos.data.ImagesRepository
-import dagger.hilt.android.qualifiers.ActivityContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.io.File
@@ -24,7 +22,6 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class UseCameraUseCase @Inject constructor(
 	private val createImageCaptureStorageOptions: CreateImageCaptureStorageOptions,
-	@ActivityContext private val context: Context,
 	private val imagesRepository: ImagesRepository,
 	private val cameraProvider: ProcessCameraProvider,
 	private val displayManager: DisplayManager
@@ -141,8 +138,6 @@ class UseCameraUseCase @Inject constructor(
 				override fun onError(exception: ImageCaptureException) {
 					Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
 					makePhotoResult.complete("Photo capture failed: ${exception.message}")
-
-					// TODO handle exception
 					super.onError(exception)
 				}
 			})

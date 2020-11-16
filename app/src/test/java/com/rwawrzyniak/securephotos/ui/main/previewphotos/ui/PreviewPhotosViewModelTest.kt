@@ -10,7 +10,7 @@ import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.core.test.app
 import com.rwawrzyniak.securephotos.core.test.test
 import com.rwawrzyniak.securephotos.data.ImagesPagingDataSource
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -34,7 +34,7 @@ internal class PreviewPhotosViewModelTest {
 	@Mock
 	private lateinit var createPagerUseCase: CreatePagerUseCase
 
-	private val flowMock: Flow<PagingData<ImageDto>> = MutableSharedFlow()
+	private val flowMock: Flow<PagingData<ImageModel>> = MutableSharedFlow()
 
 	private val resources: Resources = app().resources
 

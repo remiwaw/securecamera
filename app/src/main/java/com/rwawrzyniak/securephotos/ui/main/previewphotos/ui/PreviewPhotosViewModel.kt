@@ -4,13 +4,11 @@ import android.content.res.Resources
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.rwawrzyniak.securephotos.R
 import com.rwawrzyniak.securephotos.data.ImagesPagingDataSource
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -24,7 +22,7 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 	}
 
 	internal data class PreviewPhotosViewState(
-		val pagingDataFlow: Flow<PagingData<ImageDto>>? = null,
+		val pagingDataFlow: Flow<PagingData<ImageModel>>? = null,
 		val noPhotosAvailable: Boolean = true,
 		val loadedImagesCountText: String = ""
 	)
@@ -95,7 +93,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 
 	private fun onInitialize() = updatePageList(wirePagedList())
 
-	private fun wirePagedList(): Flow<PagingData<ImageDto>> {
+	private fun wirePagedList(): Flow<PagingData<ImageModel>> {
 		val config = PagingConfig(
 			pageSize = PAGE_SIZE,
 			initialLoadSize = PAGE_SIZE,
@@ -106,7 +104,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 		return createPagerUseCase.createFlow(viewModelScope, config, { imagesPagingDataSource })
 	}
 
-	private fun updatePageList(pagingDataFlow: Flow<PagingData<ImageDto>>) =
+	private fun updatePageList(pagingDataFlow: Flow<PagingData<ImageModel>>) =
 		PreviewPhotosViewState(pagingDataFlow = pagingDataFlow)
 
 	internal companion object {

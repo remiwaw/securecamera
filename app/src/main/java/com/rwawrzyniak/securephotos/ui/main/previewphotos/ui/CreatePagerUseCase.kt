@@ -1,9 +1,7 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos.ui
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageDto
+import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -13,9 +11,9 @@ class CreatePagerUseCase @Inject constructor() {
 	fun createFlow(
 		viewModelScope: CoroutineScope,
 		config: PagingConfig,
-		pagingSourceFactory: () -> PagingSource<Int, ImageDto>,
+		pagingSourceFactory: () -> PagingSource<Int, ImageModel>,
 		initialKey: Int = 1,
-		): Flow<PagingData<ImageDto>> =
+		): Flow<PagingData<ImageModel>> =
 		Pager(config, initialKey = initialKey, pagingSourceFactory = pagingSourceFactory)
 			.flow
 			.cachedIn(viewModelScope)
