@@ -16,6 +16,12 @@ android {
 }
 
 dependencies {
+	// Testing
+	androidTestImplementation project(':core-test')
+	testImplementation project(':core-test')
+	// TODO make module with robolectric tests
+	testImplementation libraries.tests.roboelectric
+
 	// Hilt dependencies
 	implementation libraries.hilt.android
 	kapt libraries.hilt.kapt
