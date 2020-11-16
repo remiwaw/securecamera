@@ -51,7 +51,7 @@ ext.libraries = [
 				mockitoKotlin: "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version",
 				mockitoInline   : "org.mockito:mockito-inline:$mockito_version",
 				assertk         : "com.willowtreeapps.assertk:assertk-jvm:$assertk_version",
-
+				coroutinesTest : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version",
 				androidx : [
 						core        : "androidx.test:core:$androidx_tests_version",
 						runner      : "androidx.test:runner:$androidx_tests_version",

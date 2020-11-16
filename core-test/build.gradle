@@ -6,6 +6,7 @@ dependencies {
 	api libraries.tests.androidx.core
 	api libraries.tests.assertk
 	api libraries.tests.mockitoInline
+	api libraries.tests.coroutinesTest
 
 	// TODO create Android test module for instumentatin tests
 	api libraries.tests.androidx.runner
