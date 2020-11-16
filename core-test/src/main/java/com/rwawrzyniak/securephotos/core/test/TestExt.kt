@@ -37,6 +37,7 @@ class TestObserver<T>(
         assertEquals(values.toList(), this.values)
         return this
     }
+
     fun finish() {
         job.cancel()
     }

@@ -1,9 +1,7 @@
 package com.rwawrzyniak.securephotos.ui.main.previewphotos.ui
 
 import android.content.res.Resources
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -43,9 +41,9 @@ internal abstract class PreviewPhotosViewModel : ViewModel() {
 
 @ExperimentalCoroutinesApi
 internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
-	@Assisted private val savedStateHandle: SavedStateHandle,
 	private val imagesPagingDataSource: ImagesPagingDataSource,
-	private val resources: Resources
+	private val resources: Resources,
+	private val createPagerUseCase: CreatePagerUseCase
 ) : PreviewPhotosViewModel() {
 
 	private val _actionChannel = MutableSharedFlow<PreviewPhotosViewAction>()
@@ -105,9 +103,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 			enablePlaceholders = true
 		)
 
-		return Pager(config, initialKey = 1, pagingSourceFactory = { imagesPagingDataSource })
-			.flow
-			.cachedIn(viewModelScope)
+		return createPagerUseCase.createFlow(viewModelScope, config, { imagesPagingDataSource })
 	}
 
 	private fun updatePageList(pagingDataFlow: Flow<PagingData<ImageDto>>) =
