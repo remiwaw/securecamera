@@ -22,7 +22,6 @@ internal class ImagesFileSystemDaoTest {
 	fun shouldUseFileImageProviderForLoading(){
 		val pageNumber = 1
 		val pageSize = 5
-		val byteArrayToSave = ByteArray(10)
 		sut().load(pageNumber, pageSize)
 		verify(fileImageProvider).readFilesPaged(pageNumber, pageSize, THUMBNAIL)
 	}

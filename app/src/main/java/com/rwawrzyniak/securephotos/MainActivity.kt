@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
 	}
 
 	private fun navigateToAppCodeScreenIfNotAlreadyDisplayed(navController: NavController) {
-		// TODO avoid hardcoded label for fragment
 		if (shouldDisplayAppCode())
 			navController.navigate(R.id.action_global_appCodeFragment)
 	}

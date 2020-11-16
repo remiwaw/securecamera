@@ -4,6 +4,7 @@ import android.os.Build
 import com.rwawrzyniak.securephotos.core.test.test
 import com.rwawrzyniak.securephotos.ui.main.appcode.ui.AppCodeViewModel
 import com.rwawrzyniak.securephotos.ui.main.appcode.ui.AppCodeViewModelImpl
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -13,6 +14,7 @@ import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+@ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [Build.VERSION_CODES.O_MR1]) // some magic to run robolectric in Java 8 / not 9

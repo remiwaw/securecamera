@@ -25,14 +25,14 @@ internal class FileImageProviderTest {
 
 	@Before
 	fun setUp() {
-		MockitoAnnotations.initMocks(this)
+		MockitoAnnotations.openMocks(this)
 	}
 
 	@Test
 	fun shouldReturnEmptyListIfNoFiles(){
 		val sut = sut()
 		val result = sut.readFilesPaged(1,3)
-		assertk.assertThat((result as DataState.Success).data).isEqualTo(listOf())
+		assertThat((result as DataState.Success).data).isEqualTo(listOf())
 	}
 
 	@Test
@@ -50,7 +50,7 @@ internal class FileImageProviderTest {
 		sut.save("file6", ByteArray(15))
 
 		val page = sut.readFilesPaged(pageNumber, pageSize)
-		val data = (page as DataState.Success<List<File>>).data
+		 (page as DataState.Success<List<File>>).data
 
 		// file 6 is the newest then 5 then 4
 		// TODO roboletric doesnt specify lastModifed date, so its impossible to check if we get

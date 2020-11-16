@@ -3,6 +3,7 @@ package com.rwawrzyniak.securephotos.di
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.rwawrzyniak.securephotos.encryption.SecretKeyGenerator
 import com.rwawrzyniak.securephotos.encryption.usecase.FindOrCreateKeyUseCase
 import dagger.Module
 import dagger.Provides
@@ -18,8 +19,7 @@ object EncryptionModule {
 	@Singleton
 	@Provides
 	fun provideDisplayManager(
-		@ApplicationContext context: Context,
-		secretKeyGenerator: com.rwawrzyniak.securephotos.encryption.SecretKeyGenerator,
+		secretKeyGenerator: SecretKeyGenerator,
 		encryptedSharedPreferences: EncryptedSharedPreferences
 	): FindOrCreateKeyUseCase {
 		return FindOrCreateKeyUseCase(

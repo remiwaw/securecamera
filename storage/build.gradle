@@ -3,5 +3,5 @@ dependencies {
 	testImplementation project(':core-test')
 
 	// TODO make module with robolectric tests
-	api libraries.tests.roboelectric
+	testImplementation libraries.tests.roboelectric
 }

@@ -39,7 +39,6 @@ internal class TakePictureViewModelImpl @ViewModelInject constructor() : TakePic
 	}
 
 	init {
-		// todo change to main?
 		viewModelScope.launch {
 			handleActions()
 		}

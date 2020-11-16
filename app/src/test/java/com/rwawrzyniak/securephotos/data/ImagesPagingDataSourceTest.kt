@@ -13,12 +13,13 @@ import com.rwawrzyniak.securephotos.core.android.DataState
 import com.rwawrzyniak.securephotos.data.model.ImageEntity
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageMapper
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ImageModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-
+@ExperimentalCoroutinesApi
 internal class ImagesPagingDataSourceTest {
 
 	@Mock

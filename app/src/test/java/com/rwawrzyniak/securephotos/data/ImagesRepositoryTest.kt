@@ -10,12 +10,13 @@ import com.rwawrzyniak.securephotos.core.android.ResizeBitmapUseCase
 import com.rwawrzyniak.securephotos.data.model.ImageEntity
 import com.rwawrzyniak.securephotos.encryption.usecase.EncryptDecryptDataUseCase
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ByteArrayBitMapMapper
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import java.io.File
-
+@ExperimentalCoroutinesApi
 internal class ImagesRepositoryTest {
 
 	@Mock
