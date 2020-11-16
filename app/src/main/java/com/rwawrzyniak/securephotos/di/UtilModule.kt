@@ -7,15 +7,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import me.echodev.resizer.Resizer
 import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-object FileStorageModule {
+object UtilModule {
 
 	@Singleton
 	@Provides
-	fun provideFileStorage(
+	fun provideImageResizer(
 		@ApplicationContext context: Context
-	): FileImageProvider = FileImageProvider(context)
+	): Resizer = Resizer(context)
 }

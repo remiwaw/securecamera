@@ -44,6 +44,7 @@ ext.libraries = [
 		coroutinesCore   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
 		coroutinesAndroid: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version",
 		coil: "io.coil-kt:coil:$coil_version",
+		imageResizer: "com.github.hkk595:Resizer:$imageResizer_version",
 
 		tests: [
 				roboelectric: "org.robolectric:robolectric:$robolectric_version",

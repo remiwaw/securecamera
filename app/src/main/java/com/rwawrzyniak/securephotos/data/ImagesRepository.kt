@@ -1,7 +1,6 @@
 package com.rwawrzyniak.securephotos.data
 
 import com.rwawrzyniak.securephotos.core.android.DataState
-import com.rwawrzyniak.securephotos.core.android.ResizeBitmapUseCase
 import com.rwawrzyniak.securephotos.core.android.ext.toByteArray
 import com.rwawrzyniak.securephotos.data.DataConstants.THUMBNAIL
 import com.rwawrzyniak.securephotos.data.DataConstants.THUMBNAIL_WIDTH_HEIGHT
@@ -9,6 +8,7 @@ import com.rwawrzyniak.securephotos.data.model.ImageEntity
 import com.rwawrzyniak.securephotos.encryption.usecase.EncryptDecryptDataUseCase
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ByteArrayBitMapMapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import me.echodev.resizer.Resizer
 import java.io.File
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class ImagesRepository @Inject constructor(
 	private val imagesFileSystemDao: ImagesFileSystemDao,
 	private val encryptDecryptDataUseCase: EncryptDecryptDataUseCase,
-	private val bitmapUseCase: ResizeBitmapUseCase,
+	private val resizer: Resizer,
 	private val byteArrayBitMapMapper: ByteArrayBitMapMapper
 ) {
 	fun loadAndDecrypt(pageNumber: Int, pageSize: Int): DataState<List<ImageEntity>> {
@@ -50,10 +50,9 @@ class ImagesRepository @Inject constructor(
 		imagesFileSystemDao.save(file.name, encryptDecryptDataUseCase.encrypt(file))
 
 		// Thumbnail
-		val thumbnail = bitmapUseCase.resizeBitmap(
-			byteArrayBitMapMapper.mapFromEntity(file),
-			THUMBNAIL_WIDTH_HEIGHT
-		)
+		val thumbnail = resizer.setTargetLength(THUMBNAIL_WIDTH_HEIGHT)
+			.setSourceImage(file)
+			.resizedBitmap
 
 		val thumbnailByteArray = byteArrayBitMapMapper.mapToEntity(thumbnail)
 		imagesFileSystemDao.save(

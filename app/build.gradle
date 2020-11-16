@@ -51,6 +51,7 @@ dependencies {
 	implementation libraries.androidx.materialComponents
 
 	implementation libraries.coil
+	implementation libraries.imageResizer
 
 	implementation libraries.androidx.paging
 

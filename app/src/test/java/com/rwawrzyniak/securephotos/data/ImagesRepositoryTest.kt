@@ -4,13 +4,14 @@ import android.graphics.Bitmap
 import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.isEqualTo
+import com.google.common.base.Joiner.on
 import com.nhaarman.mockitokotlin2.*
 import com.rwawrzyniak.securephotos.core.android.DataState
-import com.rwawrzyniak.securephotos.core.android.ResizeBitmapUseCase
 import com.rwawrzyniak.securephotos.data.model.ImageEntity
 import com.rwawrzyniak.securephotos.encryption.usecase.EncryptDecryptDataUseCase
 import com.rwawrzyniak.securephotos.ui.main.previewphotos.datasource.mapper.ByteArrayBitMapMapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import me.echodev.resizer.Resizer
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
@@ -24,7 +25,7 @@ internal class ImagesRepositoryTest {
 	@Mock
 	private lateinit var encryptDecryptDataUseCase: EncryptDecryptDataUseCase
 	@Mock
-	private lateinit var bitmapUseCase: ResizeBitmapUseCase
+	private lateinit var resizer: Resizer
 	@Mock
 	private lateinit var byteArrayBitMapMapper: ByteArrayBitMapMapper
 	@Mock
@@ -111,13 +112,14 @@ internal class ImagesRepositoryTest {
 			on { name } doReturn "testFile"
 		}
 
-		bitmapUseCase.stub {
-			on { resizeBitmap(any(), any()) } doReturn thumbnail
+		resizer.stub {
+			on { setTargetLength(any()) } doReturn resizer
+			on { setSourceImage(any()) } doReturn resizer
+			on { resizedBitmap } doReturn thumbnail
 		}
 
 		byteArrayBitMapMapper.stub {
 			on { mapToEntity(thumbnail) } doReturn unencryptedArrayThumbnail
-			on { mapFromEntity(file1) } doReturn thumbnail
 		}
 
 		imagesFileSystemDao.stub {
@@ -142,7 +144,7 @@ internal class ImagesRepositoryTest {
 	private fun sut() = ImagesRepository(
 		imagesFileSystemDao,
 		encryptDecryptDataUseCase,
-		bitmapUseCase,
+		resizer,
 		byteArrayBitMapMapper
 	)
 }

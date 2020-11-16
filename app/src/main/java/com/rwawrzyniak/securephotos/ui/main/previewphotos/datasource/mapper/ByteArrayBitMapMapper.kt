@@ -12,8 +12,6 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class ByteArrayBitMapMapper @Inject constructor() : EntityMapper<ByteArray, Bitmap> {
 
-	fun mapFromEntity(file: File): Bitmap = mapFromEntity(file.toByteArray())
-
 	override fun mapFromEntity(entity: ByteArray): Bitmap {
 		return BitmapFactory.decodeByteArray(
 			entity,
