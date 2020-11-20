@@ -10,6 +10,7 @@ class AppCodeCheckUseCase @Inject internal constructor(
 	init {
 		// We set hardcoded password, it could be extended in future to also set password.
 		if (preferences.contains(Constants.ENCRYPTED_PREFS_APP_CODE_KEY).not())
+			// TODO Hash password before saving.
 			preferences.edit().putString(
 				Constants.ENCRYPTED_PREFS_APP_CODE_KEY,
 				Constants.PLAIN_TEXT_PASSWORD
