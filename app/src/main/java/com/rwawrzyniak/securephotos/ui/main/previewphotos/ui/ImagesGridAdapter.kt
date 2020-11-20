@@ -25,6 +25,8 @@ class ImagesGridAdapter @Inject constructor() :
 	override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
 		val imageModel: ImageModel? = getItem(position)
 
+		// TODO it would be better doing decryption here instead of storing all data as byte arrays.
+		// it might cause a high memory footprint (even if we are sending only thumbnails).
 		imageModel?.let {
 			holder.iv.load(imageModel.bitmap) { placeholder(R.drawable.ic_baseline_lock_24) }
 			holder.iv.setOnClickListener {

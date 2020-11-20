@@ -126,6 +126,8 @@ class UseCameraUseCase @Inject constructor(
 				override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
 					// This api is not clear, outputFileResults.savedUri is not null ONLY if file was saved using MediaStore
 					val savedImage = createOutputOptionsAndFilePair.second
+
+					// TODO Create workmanager to do it in background, it doesnt take much time, but just in case.
 					val result = imagesRepository.saveAndEncryptOriginalAndThumbnail(savedImage)
 
 					when (result) {
