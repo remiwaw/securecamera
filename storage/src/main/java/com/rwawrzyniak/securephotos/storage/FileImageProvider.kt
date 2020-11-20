@@ -9,6 +9,8 @@ import javax.inject.Inject
 
 class FileImageProvider @Inject constructor(private val context: Context){
 
+	// TODO Actually it'd be better to just give back as result a path to the file, not file itself / byte array
+	// So we would avoid storing so much data in memory.
 	fun readFilesPaged(pageNumber: Int, pageSize: Int, withPrefix: String = ""): DataState<List<File>> {
 		return  try {
 			val dir = getDir()
