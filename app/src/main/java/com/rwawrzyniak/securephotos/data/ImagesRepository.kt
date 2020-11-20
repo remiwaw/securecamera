@@ -45,22 +45,24 @@ class ImagesRepository @Inject constructor(
 
 	// TODO This is not typial for repository, normally we should save/read only.
 	// Saving 2 files should be separated to a new use case. Or rename repository
-	fun saveAndEncryptOriginalAndThumbnail(file: File) {
+	fun saveAndEncryptOriginalAndThumbnail(file: File): DataState<File> {
 		// We save file in two versions: full resolution and one only thumbnails
-		imagesFileSystemDao.save(file.name, encryptDecryptDataUseCase.encrypt(file))
+		return try {
+			imagesFileSystemDao.save(file.name, encryptDecryptDataUseCase.encrypt(file))
 
-		// Thumbnail
-		val thumbnail = resizer.setTargetLength(THUMBNAIL_WIDTH_HEIGHT)
-			.setSourceImage(file)
-			.resizedBitmap
+			// Thumbnail
+			val thumbnail = resizer.setTargetLength(THUMBNAIL_WIDTH_HEIGHT)
+				.setSourceImage(file)
+				.resizedBitmap
 
-		val thumbnailByteArray = byteArrayBitMapMapper.mapToEntity(thumbnail)
-		imagesFileSystemDao.save(
-			"${THUMBNAIL}${file.name}",
-			encryptDecryptDataUseCase.encrypt(thumbnailByteArray)
-		)
-
-		// Delete non encrypted file
-		file.delete()
+			val thumbnailByteArray = byteArrayBitMapMapper.mapToEntity(thumbnail)
+			imagesFileSystemDao.save(
+				"${THUMBNAIL}${file.name}",
+				encryptDecryptDataUseCase.encrypt(thumbnailByteArray)
+			)
+		} finally {
+			// Delete non encrypted file
+			file.delete()
+		}
 	}
 }

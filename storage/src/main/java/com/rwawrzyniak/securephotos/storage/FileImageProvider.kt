@@ -41,19 +41,21 @@ class FileImageProvider @Inject constructor(private val context: Context){
 		DataState.Error(e)
 	}
 
-	fun save(fileName: String, byteArray: ByteArray): DataState<File> = try {
-		val dir = getDir()
-		dir.mkdirs()
+	fun save(fileName: String, byteArray: ByteArray): DataState<File> {
+		return try {
+			val dir = getDir()
+			dir.mkdirs()
 
-		val file = File(dir, fileName)
-		file.createNewFile()
+			val file = File(dir, fileName)
+			file.createNewFile()
 
-		val fos = FileOutputStream(file)
-		fos.write(byteArray)
-		fos.close()
-        DataState.Success(file)
-	} catch (e: Exception){
-        DataState.Error(e)
+			FileOutputStream(file)
+				.use { it.write(byteArray) }
+
+			DataState.Success(file)
+		} catch (e: Exception){
+			DataState.Error(e)
+		}
 	}
 
 	private fun getDir(): File {
@@ -64,7 +66,6 @@ class FileImageProvider @Inject constructor(private val context: Context){
 		// 4) App itself takes more place if we add more photos.
 		val root = context.filesDir
 		return File("${root.absolutePath}$FOLDER")
-
 	}
 
 	companion object {

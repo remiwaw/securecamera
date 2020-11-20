@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
+import com.rwawrzyniak.securephotos.core.android.DataState
 import com.rwawrzyniak.securephotos.data.ImagesRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -125,9 +126,21 @@ class UseCameraUseCase @Inject constructor(
 				override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
 					// This api is not clear, outputFileResults.savedUri is not null ONLY if file was saved using MediaStore
 					val savedImage = createOutputOptionsAndFilePair.second
-					imagesRepository.saveAndEncryptOriginalAndThumbnail(savedImage)
-					makePhotoResult.complete("ImageSaved" + savedImage.name)
-					Log.d(TAG, "image saved:${savedImage.name}")
+					val result = imagesRepository.saveAndEncryptOriginalAndThumbnail(savedImage)
+
+					when (result) {
+						is DataState.Success -> {
+							Log.d(TAG, "image saved:${savedImage.name}")
+							makePhotoResult.complete("ImageSaved" + savedImage.name)
+						}
+						is Error -> {
+							Log.d(TAG, "image saved fail: $result")
+							makePhotoResult.complete("saving photo failed failed: $result")
+						}
+						else -> {
+							Log.d(TAG, "image saved fail reason unknown")
+						}
+					}
 				}
 
 				override fun onCaptureSuccess(image: ImageProxy) {

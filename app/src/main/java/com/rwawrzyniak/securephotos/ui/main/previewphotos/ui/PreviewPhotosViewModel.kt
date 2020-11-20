@@ -108,7 +108,7 @@ internal class PreviewPhotosViewModelImpl @ViewModelInject constructor(
 		PreviewPhotosViewState(pagingDataFlow = pagingDataFlow)
 
 	internal companion object {
-		const val PAGE_SIZE = 6
-		const val PREFETCH_DISTANCE = 6
+		const val PAGE_SIZE = 1
+		const val PREFETCH_DISTANCE = 1
 	}
 }
